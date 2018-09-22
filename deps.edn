@@ -1,0 +1,34 @@
+{:paths ["src" "resources"]
+ :deps
+ {org.clojure/clojure {:mvn/version "1.9.0"}
+  coast-framework/coast.eta {:mvn/version "1.0.0"}}
+
+ :aliases
+ {:test
+  {:extra-paths ["test"]
+   :main-opts ["-m" "cognitect.test-runner"]
+   :extra-deps
+   {com.cognitect/test-runner {:git/url "git@github.com:cognitect-labs/test-runner"
+                               :sha "5f2b5c2efb444df76fb5252102b33f542ebf7f58"}}}
+
+  :uberjar
+  {:main-opts ["-m" "cambada.uberjar"
+               "-m" "server"
+               "--app-version" "1.0.0"
+               "--app-artifact-id" "magehash"]
+   :extra-deps
+   {luchiniatwork/cambada {:mvn/version "1.0.0"}}}
+
+  :repl {:extra-deps {nrepl {:mvn/version "0.4.2"}}}
+
+  :db/rollback
+  {:main-opts ["-m" "coast.cli" "db:rollback"]}
+
+  :db/migrate
+  {:main-opts ["-m" "coast.cli" "db:migrate"]}
+
+  :db/create
+  {:main-opts ["-m" "coast.cli" "db:create" "magehash"]}
+
+  :db/drop
+  {:main-opts ["-m" "coast.cli" "db:drop" "magehash"]}}}
