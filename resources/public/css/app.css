@@ -1,1 +1,25 @@
-/* Add your custom css here */
+body {
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+.bg-purple-gradient {
+  background: linear-gradient(90deg,#6c63ff,#4641ff);
+}
+
+.hero {
+  min-height: calc(100vh - 4rem);
+  background-image: url(../img/hero.jpg);
+  -webkit-box-shadow: 0 4px 11px rgba(124,146,169,.5);
+  box-shadow: 0 4px 11px rgba(124,146,169,.5);
+  background-size: cover;
+  background-position: 50%;
+  background-repeat: no-repeat;
+}
+
+.hero-overlay {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  opacity: .93;
+  z-index: 1;
+}
