@@ -1,7 +1,7 @@
 {:paths ["src" "resources"]
  :deps
  {org.clojure/clojure {:mvn/version "1.9.0"}
-  coast-framework/coast.eta {:mvn/version "1.0.0"}}
+  coast-framework/coast.eta {:mvn/version "1.0.0-SNAPSHOT"}}
 
  :aliases
  {:test
