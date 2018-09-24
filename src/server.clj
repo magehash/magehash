@@ -11,4 +11,4 @@
   (coast/server app {:port port}))
 
 (comment
-  ( -main))
+  (-main))

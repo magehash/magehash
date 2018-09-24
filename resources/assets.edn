@@ -2,4 +2,5 @@
                "evil-icons.min.css"
                "app.css"]
  "bundle.js" ["evil-icons.min.js"
+              "jquery-3.3.1.min.js"
               "app.js"]}

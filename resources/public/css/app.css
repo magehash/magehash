@@ -6,20 +6,30 @@ body {
   background: linear-gradient(90deg,#6c63ff,#4641ff);
 }
 
+.bg-purple {
+  background-color: #4641ff;
+}
+
+.purple {
+  color: #4641ff;
+}
+
+.bg-green {
+  background-color: #06d19c;
+}
+
+.green {
+  color: #06d19c;
+}
+
 .hero {
   min-height: calc(100vh - 4rem);
-  background-image: url(../img/hero.jpg);
-  -webkit-box-shadow: 0 4px 11px rgba(124,146,169,.5);
-  box-shadow: 0 4px 11px rgba(124,146,169,.5);
-  background-size: cover;
-  background-position: 50%;
-  background-repeat: no-repeat;
 }
 
 .hero-overlay {
   position: absolute;
   height: 100%;
   width: 100%;
-  opacity: .93;
+  opacity: .96;
   z-index: 1;
 }
