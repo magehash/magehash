@@ -1,0 +1,15 @@
+[{:db/ident :site/url
+  :db/type "citext"}
+
+ {:db/rel :site/assets
+  :db/type :many
+  :db/joins :asset/site}
+
+ {:db/col :asset/name
+  :db/type "text"}
+
+ {:db/col :asset/hash
+  :db/type "text"}
+
+ {:db/col :asset/content
+  :db/type "text"}]

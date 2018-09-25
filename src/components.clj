@@ -67,12 +67,11 @@
 (defn input [k m]
   (let [opts (dissoc m :classes)]
     [:input (merge opts {:type (name k)
-                              ;:class (merge (str "input-reset outline-0 w-100 pa2 ba b--transparent " (:class m)))
                          :class (classes
-                                 (merge '{:input-reset nil
-                                          :outline :-0
-                                          :w :-100
-                                          :pa :2
+                                 (merge '{input-reset nil
+                                          outline -0
+                                          w -100
+                                          pa 2
                                           b [a --transparent]}
                                         (:classes m)))
                          :name (qualified-name (:name m))})]))

@@ -1,0 +1,12 @@
+{:constraints #{},
+ :joins
+ {:site/assets "join asset on asset.site = site.id",
+  :asset/site :asset/site},
+ :site/assets #:db{:type :many, :joins :asset/site},
+ :idents #{:asset/id :site/id :site/url},
+ :rels #{:site/assets},
+ :cols #{:asset/hash :asset/content :asset/name},
+ :asset/hash #:db{:type "text"},
+ :asset/content #:db{:type "text"},
+ :asset/name #:db{:type "text"},
+ :site/url #:db{:type "citext"}}

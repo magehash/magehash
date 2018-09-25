@@ -27,8 +27,8 @@ db/create:
 db/drop:
 	clj -A\:db/drop
 
-worker:
-	clj -m coast.worker
+jobs:
+	clj -m coast.jobs
 
 assets:
 	clj -m coast.assets
