@@ -18,12 +18,10 @@
       (submit {:class "bg-green white br1"} "Hash. Hash. Hash."))))
 
 (defn site-assets [request]
-  (let [url (-> request :session :site :site/url)]
+  (let [{{:keys [job site]} :session} request]
     [:div
-     [:div {:id "site" :data-id (-> request :session :site :site/id)}]
-     [:div {:id "job" :data-id (-> request :session :job :id)}]
-     [:div {:class "f3-ns f4 white mb2 mt5"}
-      url]
+     [:div {:id "site" :data-url (url-for :asset/list {:job-id (str (:id job))
+                                                       :id (:site/id site)})}]
      [:div {:id "assets"}
       "Hashing in progress..."]]))
 
@@ -51,7 +49,12 @@
                                     :asset/site (:site/id site))))]
     (when (some? (:site/assets site))
       (coast/delete (:site/assets site)))
-    (coast/insert assets)))
+    (if (not (empty? assets))
+      (coast/insert assets)
+      [])))
+
+(comment
+  (coast/q '[:select jobs/id jobs/finished-at]))
 
 (defn action [request]
   (let [[site errors] (-> (:params request)

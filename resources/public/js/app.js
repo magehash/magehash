@@ -1,11 +1,9 @@
 function assets(count) {
   var $site = $("#site");
 
-  console.log("assets");
-
   if($site.length > 0) {
-    $.get("/site/" + $site.data("id") + "/assets?job-id=" + $("#job").data("id"), function(html) {
-      console.log(html)
+    $.get($site.data("url"), function(html) {
+
       if(!!html) {
         $("#site").remove();
         $("#assets").html(html);
@@ -19,7 +17,7 @@ function assets(count) {
 
         setTimeout(function() {
           assets(count + 1);
-        }, 3000);
+        }, 1000);
       }
     })
   }

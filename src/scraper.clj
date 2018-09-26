@@ -42,7 +42,7 @@
   (let [url (if (string/starts-with? src "http") src (str s src))
         body (:body @(http/get url {:as :text}))]
     (merge m {:name src
-              :sha1 (sha1 body)})))
+              :sha1 (sha1 (or body ""))})))
 
 (defn scripts [url]
   (let [host-url (host url)

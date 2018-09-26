@@ -1,6 +1,5 @@
 {"bundle.css" ["tachyons.min.css"
-               "evil-icons.min.css"
+               "font-awesome-5.3.1.css"
                "app.css"]
- "bundle.js" ["evil-icons.min.js"
-              "jquery-3.3.1.min.js"
+ "bundle.js" ["jquery-3.3.1.min.js"
               "app.js"]}

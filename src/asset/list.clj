@@ -11,19 +11,16 @@
                       {:id (-> request :params :job-id)}))]
     (if (nil? (:jobs/finished-at job))
       (ok nil)
-      (ok [:div {:class "bg-white purple br3 pa3 shadow-4"}
+      (ok [:div {:class "bg-white purple br1 pa2 shadow-4 overflow-scroll w-100" :style "max-height: 300px"}
            (if (empty? (:site/assets site))
-            [:div "Your site doesn't have js! 🎉"]
+            [:div "There was a problem getting your js! ☹️"]
             [:ul {:class "list pl0"}
-             (for [{:asset/keys [hash name]} (:site/assets site)]
+             (for [{:asset/keys [hash content name]} (:site/assets site)]
                [:li {:class "pb3"}
-                [:span name]
-                [:div {:class "mt1"}
-                 [:span {:class "green dib"}
-                  (icon "check" {:size :s})]
-                 [:span {:class "black v-top dib mt1"}
-                  (subs hash 0 7)]]])])]))))
-
-(first (q '[:select jobs/finished-at
-            :where [jobs/id ?id]]
-          {:id 30}))
+                [:div {:class "cf"}
+                 [:div {:class "fl mr2 w1"}
+                  (icon "check-circle" {:color "#06d19c"})]
+                 [:div {:class "fl mr2 w3"}
+                  (subs hash 0 7)]
+                 [:div {:title (if (= name "inline") content name) :class "fl w5" :style "white-space: nowrap; text-overflow: ellipsis; overflow: hidden;"}
+                  name]]])])]))))

@@ -3,14 +3,12 @@
             [clojure.string :as string]))
 
 (defn icon
-  ([name opts]
-   (let [{:keys [size color class]} opts]
-     [:div {:class class
-            :data-icon (str "ei-" name)
-            :data-size (or size "m")
-            :style {:fill (or color "")}}]))
-  ([name]
-   (icon name {})))
+  ([n opts]
+   (let [{:keys [color size]} opts]
+     [:i {:class (str "fas fa-" (name n))
+          :style (str "font-size: " (or size "16") "px; color: " (or color "#333"))}]))
+  ([n]
+   (icon n {})))
 
 (defn nav [request]
   [:nav {:class "dt w-100 border-box pa3 ph5-ns fixed z-2"}
