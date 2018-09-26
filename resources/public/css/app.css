@@ -22,6 +22,14 @@ body {
   color: #06d19c;
 }
 
+.b--green {
+  border-color: #06d19c;
+}
+
+.bg-lightest-gray {
+  background-color: #f7f7f7;
+}
+
 .hero {
   min-height: calc(100vh - 4rem);
 }

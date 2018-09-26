@@ -1,7 +1,7 @@
 {:paths ["src" "resources"]
  :deps
  {org.clojure/clojure {:mvn/version "1.9.0"}
-  coast-framework/coast.eta {:mvn/version "1.0.1"}
+  coast-framework/coast.eta {:mvn/version "1.0.2"}
   enlive {:mvn/version "1.1.6"}}
 
 
