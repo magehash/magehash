@@ -27,7 +27,7 @@
 
 (defn hero [request]
   [:div {:class "hero bg-purple-gradient relative white pb4"}
-   [:div {:class "mw9 center ph3 pt7"}
+   [:div {:class "mw9 center ph3 pt7 hero-title__mobile"}
     [:div {:class "pb3"}
      [:div {:class "f-headline-l fw6 tc-ns f1 white"} "Watch your assets"]
      [:div {:class "f3-ns f4 tc-ns lh-copy white-80 center"}
@@ -47,7 +47,7 @@
   [:div
    (hero request)
 
-   [:div {:class "bg-white pv4 ph3"}
+   [:div {:class "bg-white pv4 ph3 pv6_mobile"}
     [:div {:class "mb5"}
        [:div {:class "tc pb5"}
         [:h4 {:class "f1 explainer-title"} "Why?"
@@ -90,7 +90,7 @@
               [:cite {:class "f6 tracked fs-normal fr pb3"}
                      [:a {:class "black" :href "https://www.riskiq.com/blog/labs/magecart-newegg/"}
                          "-RiskIQ"]]]]]]]]
-   [:div {:class "pv6 ph3 bg-lightest-gray"}
+   [:div {:class "pv6 ph3 bg-lightest-gray pv6_mobile"}
     [:div {:class "cf mw8 center"}
        [:div {:class "fl w-50-ns w-100 h5 flex flex-column justify-center"}
         [:div {:class "ph2"}
@@ -103,7 +103,7 @@
        [:div {:class "fl w-50-ns w-100 h5 flex flex-column justify-center"}
         [:div {:class "ph4-ns"}
          [:img {:src "/img/safe-lander.svg"}]]]]]
-   [:div {:class "pv6 ph3"}
+   [:div {:class "pv6 ph3 pv6_mobile"}
     [:div {:class "cf mw8 center"}
 
      [:div {:class "fl w-50-ns w-100 h5 flex flex-column justify-center"}
@@ -118,7 +118,7 @@
        [:p {:class "f5 lh-copy mid-gray"}
         "Let Magehash do the tedious work for you."
         "Just enter your sites in the dashboard and they'll be monitored every hour on the hour"]]]]]
-   [:div {:class "bg-lightest-gray pv6 ph3"}
+   [:div {:class "bg-lightest-gray pv6 ph3 pv6_mobile"}
     [:div {:class "cf mw8 center"}
      [:div {:class "fl w-50-ns w-100 h5 flex flex-column justify-center"}
       [:div {:class "ph2"}
