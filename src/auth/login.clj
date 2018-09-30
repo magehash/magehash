@@ -1,4 +1,4 @@
-(ns home.index
+(ns auth.login
   (:require [components :refer [icon input label submit error]]
             [coast :refer [form action-for transact redirect url-for rescue validate queue]]
             [scraper]))
@@ -7,7 +7,7 @@
   (let [site-url-error? (some? (-> request :errors :site/url))]
     (form (action-for :site.new/action)
       (input :text {:name :site/url
-                    :classes (merge '{f -4 pa 3 br 1}
+                    :classes (merge '{f -4 pa 3}
                                     (when site-url-error?
                                       '{b [a --red]}))
                     :placeholder "https://magehash.com"
@@ -15,7 +15,7 @@
                     :autofocus ""
                     :value (-> request :session :site :site/url)})
 
-      (submit {:class "bg-green white br1 mt2"} "Start Hashing"))))
+      (submit {:class "bg-green white br2 mt2"} "Start Hashing"))))
 
 (defn site-assets [request]
   (let [{{:keys [job site]} :session} request]
@@ -43,6 +43,7 @@
         (site-assets request))]]]]])
 
 (defn view [request]
+  (println "Showing Sign Up View")
   [:div
    (hero request)
 
@@ -157,7 +158,7 @@
                           (transact)
                           (rescue))]
     (if (nil? errors)
-      (let [job (queue :home.index/save-assets (:site/url site))]
+      (let [job (queue :auth.login/save-assets (:site/url site))]
         (-> (redirect (url-for :home))
             (assoc :session {:site (select-keys site [:site/id :site/url])
                              :job (select-keys job [:id])})))

@@ -18,7 +18,9 @@
    [:div {:class "dtc v-mid w-75 tr"}
     [:a {:class "link dim white-70 f6 f5-ns dib mr3 mr4-ns" :href "#" :title "About"}
      "About"]
-    [:a {:class "link dim white-70 f6 f5-ns dib" :href "#" :title "Sign Up"}
+    [:a {:class "link dim white-70 f6 f5-ns dib mr3 mr4-ns" :href "/sign-in" :title "Login"}
+      "Log In"]
+    [:a {:class "link dim white-70 f6 f5-ns dib" :href "/sign-up" :title "Sign Up"}
      "Sign Up"]]])
 
 (defn layout [request body]

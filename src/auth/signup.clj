@@ -1,4 +1,4 @@
-(ns home.index
+(ns auth.signup
   (:require [components :refer [icon input label submit error]]
             [coast :refer [form action-for transact redirect url-for rescue validate queue]]
             [scraper]))
@@ -7,7 +7,7 @@
   (let [site-url-error? (some? (-> request :errors :site/url))]
     (form (action-for :site.new/action)
       (input :text {:name :site/url
-                    :classes (merge '{f -4 pa 3 br 1}
+                    :classes (merge '{f -4 pa 3}
                                     (when site-url-error?
                                       '{b [a --red]}))
                     :placeholder "https://magehash.com"
@@ -43,6 +43,7 @@
         (site-assets request))]]]]])
 
 (defn view [request]
+  (println "Showing Sign Up View")
   [:div
    (hero request)
 
