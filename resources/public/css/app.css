@@ -3,7 +3,7 @@ body {
 }
 
 .bg-purple-gradient {
-  background: linear-gradient(90deg,#6c63ff,#4641ff);
+  background-image: linear-gradient(to bottom, #330867 10%, #2575fc 100%);
 }
 
 .bg-purple {
@@ -40,4 +40,9 @@ body {
   width: 100%;
   opacity: .96;
   z-index: 1;
+}
+
+.explainer-title {
+  margin-block-start: 0.8em;
+  margin-block-end: 0em;
 }

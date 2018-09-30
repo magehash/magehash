@@ -13,3 +13,4 @@ pom.xml.asc
 *.iml
 .env
 .cpcache
+resources/public/img/.DS_Store

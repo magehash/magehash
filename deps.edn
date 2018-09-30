@@ -22,7 +22,7 @@
    :extra-deps
    {luchiniatwork/cambada {:mvn/version "1.0.0"}}}
 
-  :repl {:extra-deps {nrepl {:mvn/version "0.4.2"}}}
+  :repl {:extra-deps {nrepl {:mvn/version "0.4.5"}}}
 
   :db/rollback
   {:main-opts ["-m" "coast.cli" "db:rollback"]}
