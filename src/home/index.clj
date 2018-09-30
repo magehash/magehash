@@ -26,9 +26,9 @@
       "Hashing in progress..."]]))
 
 (defn hero [request]
-  [:div {:class "hero bg-purple-gradient relative white pb7"}
-   [:div {:class "mw9 center ph4 pt7"}
-    [:div {:class "pb4"}
+  [:div {:class "hero bg-purple-gradient relative white pb4"}
+   [:div {:class "mw9 center ph3 pt7"}
+    [:div {:class "pb3"}
      [:div {:class "f-headline-l fw6 tc-ns f1 white"} "Watch your assets"]
      [:div {:class "f3-ns f4 tc-ns lh-copy white-80 center"}
       "Hash your js hourly and get notified of changes"]]
@@ -40,7 +40,8 @@
       [:div {:class "pa2"}
        (site-form request)
        (when (some? (-> request :session :site))
-        (site-assets request))]]]]])
+        (site-assets request))]]]]
+   [:img {:class "mw2 pt6 caret_home" :src "/img/caret.svg"}]])
 
 (defn view [request]
   [:div
@@ -108,6 +109,7 @@
      [:div {:class "fl w-50-ns w-100 h5 flex flex-column justify-center"}
       [:div {:class "ph4-ns"}
        [:img {:src "/img/windows-lander.svg"}]]]
+
 
      [:div {:class "fl w-50-ns w-100 h5 flex flex-column justify-center"}
       [:div {:class "ph2"}

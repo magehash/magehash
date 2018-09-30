@@ -57,3 +57,21 @@ button:focus {
   margin-block-start: 0.8em;
   margin-block-end: 0em;
 }
+
+.caret_home {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  float: none;
+  padding-top: 10.5rem;
+  animation-name: floating;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+@keyframes floating {
+    from { transform: translate(0,  0px); }
+    65%  { transform: translate(0, 15px); }
+    to   { transform: translate(0, -0px); }
+}
