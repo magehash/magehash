@@ -63,7 +63,8 @@ button:focus {
   margin-left: auto;
   margin-right: auto;
   float: none;
-  padding-top: 10.5rem;
+  padding-top: 11rem;
+  margin-bottom: 0.5rem;
   animation-name: floating;
   animation-duration: 3s;
   animation-iteration-count: infinite;
