@@ -15,7 +15,7 @@
                     :autofocus ""
                     :value (-> request :session :site :site/url)})
 
-      (submit {:class "bg-green white br1"} "Start Hashing"))))
+      (submit {:class "bg-green white br1 mt2"} "Start Hashing"))))
 
 (defn site-assets [request]
   (let [{{:keys [job site]} :session} request]
@@ -26,7 +26,7 @@
       "Hashing in progress..."]]))
 
 (defn hero [request]
-  [:div {:class "hero bg-purple-gradient relative white pb4"}
+  [:div {:class "hero bg-purple-gradient relative white pb7"}
    [:div {:class "mw9 center ph4 pt7"}
     [:div {:class "pb4"}
      [:div {:class "f-headline-l fw6 tc-ns f1 white"} "Watch your assets"]

@@ -3,7 +3,7 @@ body {
 }
 
 .bg-purple-gradient {
-  background-image: linear-gradient(to bottom, #330867 10%, #2575fc 100%);
+  background-image: linear-gradient(to bottom, #0C0F47 10%, #2575fc 100%);
 }
 
 .bg-purple {
@@ -15,19 +15,23 @@ body {
 }
 
 .bg-green {
-  background-color: #06d19c;
+  background-color: #60BA46;
 }
 
 .green {
-  color: #06d19c;
+  color: #60BA46;
 }
 
 .b--green {
-  border-color: #06d19c;
+  border-color: #60BA46;
 }
 
 .bg-lightest-gray {
   background-color: #f7f7f7;
+}
+
+.bg-blue-90 {
+  background-color: #0C0F47;
 }
 
 .hero {
@@ -40,6 +44,13 @@ body {
   width: 100%;
   opacity: .96;
   z-index: 1;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
 }
 
 .explainer-title {
