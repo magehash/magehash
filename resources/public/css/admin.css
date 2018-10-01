@@ -1,0 +1,23 @@
+body{
+	background-color: #f1f5f8;
+}
+
+.dashboard-content{
+	padding-top: 5rem;
+}
+
+.dash-title {
+	margin-block-start: 1em;
+  margin-block-end: 0px;
+}
+
+.dash-subtitle{
+	margin-block-start: 0px;
+	color: #8795a1;
+}
+
+.button__add-website {
+	float: right;
+	background-image: linear-gradient(-60deg, #0C0F47 0%, #2a2aad 100%);
+	border: none;
+}
