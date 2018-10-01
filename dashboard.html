@@ -11,22 +11,26 @@
 		<nav class="dt w-100 border-box pa3 ph5-ns fixed z-2 bg-blue-90">
 	   <a class="dtc v-mid white link dim w-third" href="" title="Home">
 	    <img src="resources/public/img/logo-white.png"></a>
-
-	   <div class="dtc v-mid w-75 tr">
-
-	    <a class="link dim white-70 f6 f5-ns dib mr3 mr4-ns" href="/sign-in" title="Login">
-	      Log Out</a>
-			 </div>
-			</nav>
+	 	</nav>
 			<div class="cf ph2-ns dashboard-content">
-				<div class="fl w-100 w-25-ns pa2">
-					Hello
+				<div class="fl w-100 w-25-ns pa2 dash__sidebar">
+					<ul class="list pl0 menu__list">
+						<a href="/dash">
+							<li class="menu__list-element"><img src="resources/public/img/internet.svg" height="20px">  <span class="ml1">Websites</span></li>
+						</a>
+						<a href="/ckcch">
+							<li class="menu__list-element"><img src="resources/public/img/settings.svg" height="20px"> <span class="ml1">Settings</span></li>
+						</a>
+						<a href="/ciao">
+							<li class="menu__list-element"><img src="resources/public/img/exit.svg" height="20px" fill="red"> <span class="ml1">Logout</span> </li>
+						</a>
+					</ul>
 				</div>
-				<div class="fl w-100 w-75-ns pa2">
+				<div class="fl w-100 w-75-ns pa2 dashboard__watch-websites-container">
 					<div class="cf ph2-ns">
 						<div class="fl w-100 w-75-ns pa2">
-							<h1 class="dash-title">Monitored Websites (2/100)</h1>
-							<h2 class="lh-title pt0 mid-gray fw3 dash-subtitle">Your Websites</h2>
+							<h1 class="f3 dash-title">Monitored Websites (2/100)</h1>
+							<h2 class="f4 lh-title pt0 mid-gray fw3 dash-subtitle">Your Websites</h2>
 						</div>
 						<div class="fl w-100 w-25-ns pa2 mt4">
 								<a class="f6 link dim br-pill ph3 pv2 mb2 dib white bg-dark-blue button__add-website">Add New Website</a>

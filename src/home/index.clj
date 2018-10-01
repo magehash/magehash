@@ -44,6 +44,7 @@
    [:img {:class "mw2 pt6 caret_home" :src "/img/caret.svg"}]])
 
 (defn view [request]
+  (println "hello")
   [:div
    (hero request)
 

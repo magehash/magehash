@@ -6,6 +6,15 @@ body{
 	padding-top: 5rem;
 }
 
+.dashboard__watch-websites-container{
+	border-width: 0;
+	border-left-width: 1px;
+	border-style: solid;
+	border-color: #dae1e7;
+	min-height: 600px;
+	height: 100%
+}
+
 .dash-title {
 	margin-block-start: 1em;
   margin-block-end: 0px;
@@ -14,6 +23,29 @@ body{
 .dash-subtitle{
 	margin-block-start: 0px;
 	color: #8795a1;
+}
+
+.menu__list {
+	color: #191e38;
+}
+
+.menu__list a,  .menu__list a:hover, .menu__list a:visited, .menu__list a:link, .menu__list a:active{
+	text-decoration: none;
+}
+
+.menu__list-element{
+	display: block;
+	margin: 1.5em;
+	color: #191e38;
+	text-decoration: none;
+}
+
+.menu__list-element img{
+	display: inline-block;
+  vertical-align: middle;
+}
+
+.dash__sidebar {
 }
 
 .button__add-website {
