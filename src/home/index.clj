@@ -34,8 +34,8 @@
       "Hash your js hourly and get notified of changes"]]
     [:div {:class "pb4"}
      [:div {:class "mw6 center cf tc"}
-      [:a {:class "no-underline dib mr3 w4 br-pill bg-green ba bw1 b--green tc grow ph3 pv2 white pointer"
-           :href (url-for :sign-up)}
+      [:a {:class "no-underline dib mr3 w4 br-pill bg-green ba bw1 b--green tc grow ph3 pv2 white pointer"}
+           ;:href (url-for :sign-up)}
         "Sign Up"]
 
       [:a {:class "no-underline dib w4 br-pill ba b--white bw1 bg-transparent tc grow ph3 pv2 white pointer"
