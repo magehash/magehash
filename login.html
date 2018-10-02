@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" type="text/css" href="resources/public/css/tachyons.min.css" />
+		<link rel="stylesheet" type="text/css" href="resources/public/css/auth.css" />
+	</head>
+	<body class="colorset">
+		<main>
+			<img class="auth__logo mw-100" src="resources/public/img/logo-auth.png">
+			<div class="auth-content">
+				<form class="auth__form" action="" method="">
+					<div class="form__title">
+						<p>Login</p>
+					</div>
+					<div class="form__item form__item--full form__item--email">
+						<label class="form__label" for="email">Email Address</label>
+						<input class="form__input" type="email" name="email" id="email" required>
+						<div class="form__error"></div>
+                    </div>
+                    <div class="form__item form__item--full">
+						<label class="form__label" for="password">Password</label>
+						<input class="form__input" type="password" name="password" id="password" required>
+						<div class="form__error"></div>
+                    </div>
+					<div class="form__item form__item--full form__item--actions">
+						<input class="form__button" type="submit" name="Login" value="Login">
+						<a href="login.html" class="form__forgot-link">Forgot your password? </a>
+                    </div>
+                </form>
+		</main>
+		<div class="dashed__container">
+			<p>Don't have an account yet? <a href="index.html" class="form-link">Sign Up</a></p>
+		</div>
+		<script src="resources/public/js/TweenMax.min.js"></script>
+		<script src="resources/public/js/nearby.js"></script>
+		<script src="resources/public/js/auth.js"></script>
+	</body>
+</html>

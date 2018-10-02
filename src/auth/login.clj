@@ -1,4 +1,4 @@
-(ns home.index
+(ns auth.login
   (:require [components :refer [icon input label submit error]]
             [coast :refer [form action-for transact redirect url-for rescue validate queue]]
             [scraper]))
@@ -7,7 +7,7 @@
   (let [site-url-error? (some? (-> request :errors :site/url))]
     (form (action-for :site.new/action)
       (input :text {:name :site/url
-                    :classes (merge '{f -4 pa 3 br 1}
+                    :classes (merge '{f -4 pa 3}
                                     (when site-url-error?
                                       '{b [a --red]}))
                     :placeholder "https://magehash.com"
@@ -15,7 +15,7 @@
                     :autofocus ""
                     :value (-> request :session :site :site/url)})
 
-      (submit {:class "bg-green white br1 mt2"} "Start Hashing"))))
+      (submit {:class "bg-green white br2 mt2"} "Start Hashing"))))
 
 (defn site-assets [request]
   (let [{{:keys [job site]} :session} request]
@@ -26,9 +26,9 @@
       "Hashing in progress..."]]))
 
 (defn hero [request]
-  [:div {:class "hero bg-purple-gradient relative white pb4"}
-   [:div {:class "mw9 center ph3 pt7 hero-title__mobile"}
-    [:div {:class "pb3"}
+  [:div {:class "hero bg-purple-gradient relative white pb7"}
+   [:div {:class "mw9 center ph4 pt7"}
+    [:div {:class "pb4"}
      [:div {:class "f-headline-l fw6 tc-ns f1 white"} "Watch your assets"]
      [:div {:class "f3-ns f4 tc-ns lh-copy white-80 center"}
       "Hash your js hourly and get notified of changes"]]
@@ -40,15 +40,14 @@
       [:div {:class "pa2"}
        (site-form request)
        (when (some? (-> request :session :site))
-        (site-assets request))]]]]
-   [:img {:class "mw2 pt6 caret_home" :src "/img/caret.svg"}]])
+        (site-assets request))]]]]])
 
 (defn view [request]
-  (println "hello")
+  (println "Showing Sign Up View")
   [:div
    (hero request)
 
-   [:div {:class "bg-white pv4 ph3 pv6_mobile"}
+   [:div {:class "bg-white pv4 ph3"}
     [:div {:class "mb5"}
        [:div {:class "tc pb5"}
         [:h4 {:class "f1 explainer-title"} "Why?"
@@ -91,7 +90,7 @@
               [:cite {:class "f6 tracked fs-normal fr pb3"}
                      [:a {:class "black" :href "https://www.riskiq.com/blog/labs/magecart-newegg/"}
                          "-RiskIQ"]]]]]]]]
-   [:div {:class "pv6 ph3 bg-lightest-gray pv6_mobile"}
+   [:div {:class "pv6 ph3 bg-lightest-gray"}
     [:div {:class "cf mw8 center"}
        [:div {:class "fl w-50-ns w-100 h5 flex flex-column justify-center"}
         [:div {:class "ph2"}
@@ -104,13 +103,12 @@
        [:div {:class "fl w-50-ns w-100 h5 flex flex-column justify-center"}
         [:div {:class "ph4-ns"}
          [:img {:src "/img/safe-lander.svg"}]]]]]
-   [:div {:class "pv6 ph3 pv6_mobile"}
+   [:div {:class "pv6 ph3"}
     [:div {:class "cf mw8 center"}
 
      [:div {:class "fl w-50-ns w-100 h5 flex flex-column justify-center"}
       [:div {:class "ph4-ns"}
        [:img {:src "/img/windows-lander.svg"}]]]
-
 
      [:div {:class "fl w-50-ns w-100 h5 flex flex-column justify-center"}
       [:div {:class "ph2"}
@@ -119,7 +117,7 @@
        [:p {:class "f5 lh-copy mid-gray"}
         "Let Magehash do the tedious work for you."
         "Just enter your sites in the dashboard and they'll be monitored every hour on the hour"]]]]]
-   [:div {:class "bg-lightest-gray pv6 ph3 pv6_mobile"}
+   [:div {:class "bg-lightest-gray pv6 ph3"}
     [:div {:class "cf mw8 center"}
      [:div {:class "fl w-50-ns w-100 h5 flex flex-column justify-center"}
       [:div {:class "ph2"}
@@ -160,7 +158,7 @@
                           (transact)
                           (rescue))]
     (if (nil? errors)
-      (let [job (queue :home.index/save-assets (:site/url site))]
+      (let [job (queue :auth.login/save-assets (:site/url site))]
         (-> (redirect (url-for :home))
             (assoc :session {:site (select-keys site [:site/id :site/url])
                              :job (select-keys job [:id])})))

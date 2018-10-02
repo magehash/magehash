@@ -3,7 +3,7 @@ body {
 }
 
 .bg-purple-gradient {
-  background: linear-gradient(90deg,#6c63ff,#4641ff);
+  background-image: linear-gradient(to bottom, #0C0F47 10%, #2575fc 100%);
 }
 
 .bg-purple {
@@ -15,19 +15,23 @@ body {
 }
 
 .bg-green {
-  background-color: #06d19c;
+  background-color: #60BA46;
 }
 
 .green {
-  color: #06d19c;
+  color: #60BA46;
 }
 
 .b--green {
-  border-color: #06d19c;
+  border-color: #60BA46;
 }
 
 .bg-lightest-gray {
   background-color: #f7f7f7;
+}
+
+.bg-blue-90 {
+  background-color: #0C0F47;
 }
 
 .hero {
@@ -40,4 +44,55 @@ body {
   width: 100%;
   opacity: .96;
   z-index: 1;
+}
+
+input:focus,
+select:focus,
+textarea:focus,
+button:focus {
+    outline: none;
+}
+
+.explainer-title {
+  margin-block-start: 0.8em;
+  margin-block-end: 0em;
+}
+
+.caret_home {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  float: none;
+  padding-top: 11rem;
+  margin-bottom: 0.5rem;
+  animation-name: floating;
+  animation-duration: 3s;
+  animation-iteration-count: infinite;
+  animation-timing-function: ease-in-out;
+}
+
+@media only screen and (max-width: 400px) {
+  .hero-title__mobile {
+    padding-top: 14rem;
+  }
+  .pv6_mobile{
+    padding-top: 1rem;
+    padding-bottom: 1rem;
+    }
+}
+
+@media only screen and (max-height: 700px) {
+  .hero-title__mobile {
+    padding-top: 7rem;
+  }
+  .caret_home {
+    padding-top: 4rem;
+    margin-bottom: 2rem;
+  }
+}
+
+@keyframes floating {
+    from { transform: translate(0,  0px); }
+    65%  { transform: translate(0, 15px); }
+    to   { transform: translate(0, -0px); }
 }
