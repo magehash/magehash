@@ -11,7 +11,7 @@
    (icon n {})))
 
 (defn nav [request]
-  (when (not (contains? #{:auth.login/view :auth.login/action} (:coast.router/name request)))
+  (when (not (contains? #{:auth.login/view :auth.login/action :auth.signup/view :auth.signup/action} (:coast.router/name request)))
    [:nav {:class "dt w-100 border-box pa3 ph5-ns fixed z-2 bg-blue-90"}
     [:a {:class "dtc v-mid white link dim w-third" :href (url-for :home) :title "Home"}
      [:img {:src "img/logo-white.png"}]]
@@ -25,13 +25,15 @@
 (defn bundle-name [{route-name :coast.router/name}]
   (cond
     (contains? #{:auth.login/view
-                 :auth.login/action} route-name) "auth"
+                 :auth.login/action
+                 :auth.signup/view
+                 :auth.signup/action} route-name) "auth"
     :else "bundle"))
 
 (defn body-class [{route-name :coast.router/name}]
   (cond
-    (contains? #{:auth.login/view
-                 :auth.login/action} route-name) "colorset"
+    (contains? #{:auth.login/view :auth.login/action
+                 :auth.signup/view :auth.signup/action} route-name) "colorset"
     :else ""))
 
 (defn layout [request body]

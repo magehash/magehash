@@ -30,5 +30,5 @@
 
    [:div {:class "dashed__container"}
     [:p "Don't have an account yet? "
-     [:a {:href "index.html", :class "form-link"}
+     [:a {:href (url-for :auth.signup/view), :class "form-link"}
       "Sign Up"]]]])
