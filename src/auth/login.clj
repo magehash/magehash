@@ -6,7 +6,8 @@
   [:main
    [:img {:class "auth__logo mw-100", :src "/img/logo-auth.png"}]
    [:div {:class "auth-content"}
-    [:form {:class "auth__form"}
+    (form (merge (action-for ::action)
+                 {:class "auth__form"})
      [:div {:class "form__title"}
       [:p "Login"]]
 
@@ -25,7 +26,7 @@
      [:div {:class "form__item form__item--full form__item--actions"}
       [:input {:class "form__button", :type "submit", :name "Login", :value "Login"}]
       [:a {:href "login.html", :class "form__forgot-link"}
-       "Forgot your password?"]]]]
+       "Forgot your password?"]])]
 
 
    [:div {:class "dashed__container"}
