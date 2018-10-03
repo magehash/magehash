@@ -11,15 +11,28 @@
    (icon n {})))
 
 (defn nav [request]
-  [:nav {:class "dt w-100 border-box pa3 ph5-ns fixed z-2 bg-blue-90"}
-   [:a {:class "dtc v-mid white link dim w-third" :href (url-for :home) :title "Home"}
-    [:img {:src "img/logo-white.png"}]]
+  (when (not (contains? #{:auth.login/view :auth.login/action} (:coast.router/name request)))
+   [:nav {:class "dt w-100 border-box pa3 ph5-ns fixed z-2 bg-blue-90"}
+    [:a {:class "dtc v-mid white link dim w-third" :href (url-for :home) :title "Home"}
+     [:img {:src "img/logo-white.png"}]]
 
-   [:div {:class "dtc v-mid w-75 tr"}
-    [:a {:class "link dim white-70 f6 f5-ns dib mr3 mr4-ns" :href "/sign-in" :title "Login"}
-      "Log In"]
-    [:a {:class "link dim white-70 f6 f5-ns dib" :href "/sign-up" :title "Sign Up"}
-     "Sign Up"]]])
+    [:div {:class "dtc v-mid w-75 tr"}
+     [:a {:class "link dim white-70 f6 f5-ns dib mr3 mr4-ns" :href "/sign-in" :title "Login"}
+       "Log In"]
+     [:a {:class "link dim white-70 f6 f5-ns dib" :href "/sign-up" :title "Sign Up"}
+      "Sign Up"]]]))
+
+(defn bundle-name [{route-name :coast.router/name}]
+  (cond
+    (contains? #{:auth.login/view
+                 :auth.login/action} route-name) "auth"
+    :else "bundle"))
+
+(defn body-class [{route-name :coast.router/name}]
+  (cond
+    (contains? #{:auth.login/view
+                 :auth.login/action} route-name) "colorset"
+    :else ""))
 
 (defn layout [request body]
   [:html
@@ -32,9 +45,9 @@
      [:link {:rel "icon" :type "image/png" :sizes "16x16" :href "favicon_package/favicon-16x16.png"}]
      [:link {:rel "apple-touch-icon" :sizes "180x180" :href "favicon_package/apple-touch-icon.png"}]
      [:link {:rel "mask-icon" :href "favicon_package/safari-pinned-tab.svg" :color "#5bbad5"}]
-     (css "bundle.css")
-     (js "bundle.js")]
-    [:body
+     (css (str (bundle-name request) ".css"))
+     (js (str (bundle-name request) ".js"))]
+    [:body {:class (body-class request)}
      (nav request)
      body]])
 

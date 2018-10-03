@@ -2,4 +2,9 @@
                "font-awesome-5.3.1.css"
                "app.css"]
  "bundle.js" ["jquery-3.3.1.min.js"
-              "app.js"]}
+              "app.js"]
+ "auth.css" ["tachyons.min.css"
+             "auth.css"]
+ "auth.js" ["TweenMax.min.js"
+            "nearby.js"
+            "auth.js"]}
