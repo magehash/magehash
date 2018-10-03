@@ -1,5 +1,5 @@
 (ns components
-  (:require [coast :refer [css js url-for]]
+  (:require [coast :refer [action-for form css js url-for]]
             [clojure.string :as string]))
 
 (defn icon
@@ -10,17 +10,35 @@
   ([n]
    (icon n {})))
 
+(defn a [{:keys [action data-confirm] :as params} & children]
+  (if (nil? action)
+    [:a params children]
+    (form (if (true? data-confirm)
+            (merge action {:class "dib mb0" :data-confirm true})
+            (merge action {:class "dib mb0"}))
+     [:button {:type "submit" :class "input-reset bg-transparent bn pointer"}
+      [:div {:class (:class params)}
+       children]])))
+
 (defn nav [request]
   (when (not (contains? #{:auth.login/view :auth.login/action :auth.signup/view :auth.signup/action} (:coast.router/name request)))
-   [:nav {:class "dt w-100 border-box pa3 ph5-ns fixed z-2 bg-blue-90"}
-    [:a {:class "dtc v-mid white link dim w-third" :href (url-for :home) :title "Home"}
-     [:img {:src "img/logo-white.png"}]]
+    (if (some? (-> request :session :member/email))
+     [:nav {:class "dt w-100 border-box pa3 ph5-ns fixed z-2 bg-blue-90"}
+      [:a {:class "dtc v-mid white link dim w-third" :href (url-for :dashboard) :title "Dashboard"}
+       [:img {:src "img/logo-white.png"}]]
 
-    [:div {:class "dtc v-mid w-75 tr"}
-     [:a {:class "link dim white-70 f6 f5-ns dib mr3 mr4-ns" :href "/sign-in" :title "Login"}
-       "Log In"]
-     [:a {:class "link dim white-70 f6 f5-ns dib" :href "/sign-up" :title "Sign Up"}
-      "Sign Up"]]]))
+      [:div {:class "dtc v-mid w-75 tr"}
+       (a {:class "link dim white-70 f6 f5-ns dib mr3 mr4-ns" :action (action-for :auth.sign-out/action) :title "Sign Out"}
+         "Sign Out")]]
+     [:nav {:class "dt w-100 border-box pa3 ph5-ns fixed z-2 bg-blue-90"}
+      [:a {:class "dtc v-mid white link dim w-third" :href (url-for :home) :title "Home"}
+       [:img {:src "img/logo-white.png"}]]
+
+      [:div {:class "dtc v-mid w-75 tr"}
+       [:a {:class "link dim white-70 f6 f5-ns dib mr3 mr4-ns" :href "/sign-in" :title "Login"}
+         "Log In"]
+       [:a {:class "link dim white-70 f6 f5-ns dib" :href "/sign-up" :title "Sign Up"}
+        "Sign Up"]]])))
 
 (defn bundle-name [{route-name :coast.router/name}]
   (cond
