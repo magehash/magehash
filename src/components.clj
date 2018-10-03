@@ -35,9 +35,9 @@
        [:img {:src "img/logo-white.png"}]]
 
       [:div {:class "dtc v-mid w-75 tr"}
-       [:a {:class "link dim white-70 f6 f5-ns dib mr3 mr4-ns" :href "/sign-in" :title "Login"}
+       [:a {:class "link dim white f6 f5-ns dib mr3 mr4-ns" :href (url-for :auth.login/view) :title "Login"}
          "Log In"]
-       [:a {:class "link dim white-70 f6 f5-ns dib" :href "/sign-up" :title "Sign Up"}
+       [:a {:class "link dim white f6 f5-ns dib" :href (url-for :auth.signup/view) :title "Sign Up"}
         "Sign Up"]]])))
 
 (defn bundle-name [{route-name :coast.router/name}]
