@@ -4,18 +4,17 @@
             [scraper]))
 
 (defn site-form [request]
-  (let [site-url-error? (some? (-> request :errors :site/url))]
-    (form (action-for :site.new/action)
-      (input :text {:name :site/url
-                    :classes (merge '{f -4 pa 3 br 1}
-                                    (when site-url-error?
-                                      '{b [a --red]}))
-                    :placeholder "https://magehash.com"
-                    :required true
-                    :autofocus ""
-                    :value (-> request :session :site :site/url)})
+  (form (action-for :site.new/action)
+    (input :text {:name :site/url
+                  :classes (merge '{f -4 pa 3 br 1}
+                                  (when (some? (-> request :errors :site/url))
+                                    '{b [a --red]}))
+                  :placeholder "https://magehash.com"
+                  :required true
+                  :autofocus ""
+                  :value (-> request :session :site :site/url)})
 
-      (submit {:class "bg-green white br1 mt2"} "Start Hashing"))))
+    (submit {:class "bg-green white br1 mt2"} "Start Hashing")))
 
 (defn site-assets [request]
   (let [{{:keys [job site]} :session} request]
