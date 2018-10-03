@@ -3,7 +3,6 @@
             [components :refer [icon]]))
 
 (defn view [request]
-  (println (:params request))
   (let [site (pull [{:site/assets [:asset/name :asset/content :asset/hash]}]
                    [:site/id (-> request :params :id)])
         job (first (q '[:select jobs/finished-at
