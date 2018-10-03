@@ -1,6 +1,7 @@
 {"bundle.css" ["tachyons.min.css"
                "font-awesome-5.3.1.css"
-               "app.css"]
+               "app.css"
+               "admin.css"]
  "bundle.js" ["jquery-3.3.1.min.js"
               "app.js"]
  "auth.css" ["tachyons.min.css"
