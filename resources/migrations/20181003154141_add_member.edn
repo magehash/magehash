@@ -1,0 +1,24 @@
+[{:db/ident :member/email
+  :db/type "citext"}
+
+ {:db/col :member/password
+  :db/type "text"}
+
+ {:db/rel :member/properties
+  :db/type :many
+  :db/ref :property/member}
+
+ {:db/rel :property/member
+  :db/type :one
+  :db/delete "no action"}
+
+ {:db/rel :property/site
+  :db/type :one
+  :db/delete "no action"}
+
+ {:db/rel :site/properties
+  :db/type :many
+  :db/ref :property/site}
+
+ {:db/constraint [:property/site :property/member]
+  :db/type "unique"}]

@@ -1,12 +1,26 @@
-{:constraints #{},
+{:constraints
+ #{#:db{:constraint [:property/site :property/member],
+        :type "unique"}},
+ [:property/site :property/member] #:db{:type "unique"},
+ :site/properties #:db{:type :many, :ref :property/site},
+ :member/email #:db{:type "citext"},
  :joins
  {:site/assets "join asset on asset.site = site.id",
-  :asset/site :asset/site},
+  :asset/site :asset/site,
+  :property/site :property/site,
+  :property/member :property/member},
  :site/assets #:db{:type :many, :joins :asset/site},
- :idents #{:asset/id :site/id :site/url},
- :rels #{:site/assets},
- :cols #{:asset/hash :asset/content :asset/name},
+ :idents
+ #{:asset/id :member/email :site/id :member/id :site/url :property/id},
+ :rels
+ #{:site/properties :site/assets :property/site :member/properties
+   :property/member},
+ :cols #{:asset/hash :asset/content :member/password :asset/name},
+ :property/site #:db{:type :one, :delete "no action"},
  :asset/hash #:db{:type "text"},
+ :member/properties #:db{:type :many, :ref :property/member},
  :asset/content #:db{:type "text"},
+ :member/password #:db{:type "text"},
  :asset/name #:db{:type "text"},
+ :property/member #:db{:type :one, :delete "no action"},
  :site/url #:db{:type "citext"}}
