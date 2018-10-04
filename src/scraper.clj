@@ -2,7 +2,8 @@
   (:require [net.cgrand.enlive-html :as html]
             [org.httpkit.client :as http]
             [clojure.string :as string]
-            [clojure.edn :as edn])
+            [clojure.edn :as edn]
+            [coast :refer [q pull delete insert]])
   (:import [java.nio.charset Charset]
            [java.security MessageDigest]
            [java.net URL]))
@@ -52,3 +53,25 @@
         external (->> (filter #(not (inline? %)) script-tags)
                       (map #(external host-url %)))]
     (concat inline external)))
+
+(defn save-assets [url]
+  (let [site (pull '[site/url site/id
+                     {:site/assets [asset/id]}]
+                   [:site/url url])
+        assets (->> (scripts (:site/url site))
+                    (map #(hash-map :asset/name (:name %)
+                                    :asset/hash (:sha1 %)
+                                    :asset/content (:content %)
+                                    :asset/site (:site/id site))))]
+    (when (some? (:site/assets site))
+      (delete (:site/assets site)))
+    (if (not (empty? assets))
+      (insert assets)
+      [])))
+
+(defn -main []
+  (let [urls (->> (q '[:select site/url])
+                  (map :site/url))]
+    (doall
+      (for [url urls]
+        (save-assets url)))))
