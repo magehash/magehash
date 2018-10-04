@@ -1,0 +1,2 @@
+[{:db/ident :cron/name
+  :db/type "citext"}]

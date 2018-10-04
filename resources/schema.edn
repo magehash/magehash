@@ -11,7 +11,8 @@
   :property/member :property/member},
  :site/assets #:db{:type :many, :joins :asset/site},
  :idents
- #{:asset/id :member/email :site/id :member/id :site/url :property/id},
+ #{:asset/id :cron/id :member/email :site/id :member/id :cron/name
+   :site/url :property/id},
  :rels
  #{:site/properties :site/assets :property/site :member/properties
    :property/member},
@@ -23,4 +24,5 @@
  :member/password #:db{:type "text"},
  :asset/name #:db{:type "text"},
  :property/member #:db{:type :one, :delete "no action"},
+ :cron/name #:db{:type "citext"},
  :site/url #:db{:type "citext"}}
