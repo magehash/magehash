@@ -37,7 +37,7 @@
       [:div {:class "cf ph2-ns"}
        [:div {:class "fl w-100 w-75-ns pa2"}
         [:h1 {:class "f3 dash-title"}
-         "Monitored Websites " (str "( " (count properties)  " / 100)")]
+         "Monitored Websites " (str "(" (count properties)  " / 100)")]
         [:h2 {:class "f4 lh-title pt0 mid-gray fw3 dash-subtitle"}
          "Your Websites"]]
 
