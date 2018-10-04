@@ -67,11 +67,16 @@
       (delete (:site/assets site)))
     (if (not (empty? assets))
       (insert assets)
-      [])))
+      [])
+    (str "hashed " (count assets) " on site " url)))
 
 (defn -main []
   (let [urls (->> (q '[:select site/url])
                   (map :site/url))]
     (doall
       (for [url urls]
-        (save-assets url)))))
+        (let [s (save-assets url)]
+          @(http/post "https://hooks.slack.com/services/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"
+                      {:form-params
+                       {:payload
+                        (format "{\"text\":\"[magehash] %s\"}" s)}}))))))
