@@ -28,7 +28,7 @@
        [:img {:src "/img/logo-white.png"}]]
 
       [:div {:class "dtc v-mid w-75 tr"}
-       (a {:class "link dim white-70 f6 f5-ns dib mr3 mr4-ns" :action (action-for :auth.sign-out/action) :title "Sign Out"}
+       (a {:class "link dim white f6 f5-ns dib mr3 mr4-ns" :action (action-for :auth.sign-out/action) :title "Sign Out"}
          "Sign Out")]]
      [:nav {:class "dt w-100 border-box pa3 ph5-ns fixed z-2 bg-blue-90"}
       [:a {:class "dtc v-mid white link dim w-third" :href (url-for :home) :title "Home"}

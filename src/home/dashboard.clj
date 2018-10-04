@@ -4,6 +4,7 @@
             [components :refer [a]]))
 
 (defn view [{member-id :member/id}]
+  (println "Dashboard View")
   (let [{properties :member/properties} (pull '[{:member/properties
                                                  [property/id
                                                   {:property/site
@@ -19,13 +20,13 @@
          [:span {:class "ml1"}
           "Websites"]]]
 
-       [:a {:href "/ckcch"}
+       [:a {:href "mailto:me@ferrucc.io?Subject=Edit%20Magehash%20Account"}
         [:li {:class "menu__list-element"}
          [:img {:src "/img/settings.svg", :height "20px"}]
          [:span {:class "ml1"}
           "Settings"]]]
 
-       [:a {:href "/ciao"}
+       [:a {:href "/sign-out"}
         [:li {:class "menu__list-element"}
          [:img {:src "/img/exit.svg", :height "20px", :fill "red"}]
          [:span {:class "ml1"}

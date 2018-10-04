@@ -9,9 +9,9 @@ const validateEmail = (email) => {
     return re.test(String(email).toLowerCase());
 }
 
-const form = document.querySelector('.auth__form');
-const submitBttn = form.querySelector('.form__button');
-const requiredElems = Array.from(form.querySelectorAll('input[required]'));
+const authForm = document.querySelector('.auth__form');
+const submitBttn = authForm.querySelector('.form__button');
+const requiredElems = Array.from(authForm.querySelectorAll('input[required]'));
 
 // whatever we do, start at [distanceThreshold.max]px from the element and end at [distanceThreshold.min]px from the element.
 const distanceThreshold = {min: 0, max: 75};
