@@ -265,6 +265,13 @@ main {
 	border-radius: 20px;
 }
 
+@media screen and (min-width: 55em) {
+	.register__form {
+		border-radius: 0;
+		margin-right: 0;
+	}
+}
+
 .form__select {
 	border-radius: 5px;
 	height: 3rem;

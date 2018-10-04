@@ -5,41 +5,87 @@
 (defn view [{{:member/keys [email password confirm-password]} :errors}]
   [:main
    [:img {:class "auth__logo mw-100" :src "/img/logo-auth.png"}]
-   [:div {:class "auth-content"}
-    (form (merge (action-for ::action)
-                 {:class "auth__form"})
-     [:div {:class "form__title"}
-      [:p "Create an account"]]
+   [:div {:class "mw9 center ph3-ns"}
+         [:div {:class "cf ph2-ns bg-white br4"}
+          [:div {:class "auth-content fl w-50-l pa4 black"}
+           [:div {:class "pitch"}
+            [:h1 "We are on a mission to build the ultimate front end security platform."]
+            [:p "We take care of making sure that nothing bad happens when users connect to your website."]
+            [:p "Our tools include:"]
+            [:div {:class "pt1 pb1 pl3 pr3 br-4 pitch__features"}
+             [:ul {:class "list pl3"}
+              [:li {:class "mt3 mb3"}
+               "🛡"
+               [:strong {:class "ml2"}
+                "Static Assets Integrity Protection"] "- So now one can hijack your payments and authentications"]
+              [:li {:class "mt3 mb3"}
+               "🔜🔐"
+               [:strong {:class "ml2"}
+                "TLS Certificate Verification"] "- So you can stay safe from MITM attacks"]
+              [:li {:class "mt3 mb3"}
+               "🔜📈"
+               [:strong {:class "ml2"}
+                "Uptime Monitoring"] "- So you can always be avaiable to your users"]
+              [:li {:class "mt3 mb3"}
+               [:strong "..and many more features are on the way"]]]]]]
+          [:div {:class "fl w-50-l w-100"}
+           (form (merge (action-for ::action)
+                        {:class "auth__form mb0 register__form"})
+            [:div {:class "form__title"}
+             [:p "Create an account"]]
+            [:div {:class "form__item form__item--full form__item--email"}
+             [:label {:class "form__label" :for "email"}
+              "Email Address"]
+             [:input {:class "form__input" :type "email" :name "member/email" :id "email" :required "required"}]
+             [:div {:class "form__error"}
+              email]]
 
-     [:div {:class "form__item form__item--full form__item--email"}
-      [:label {:class "form__label" :for "email"}
-       "Email Address"]
-      [:input {:class "form__input" :type "email" :name "member/email" :id "email" :required "required"}]
-      [:div {:class "form__error"}
-       email]]
+            [:div {:class "form__item"}
+             [:label {:class "form__label" :for "password"}
+              "Password"]
+             [:input {:class "form__input" :type "password" :name "member/password" :id "password" :required "required"}]
+             [:div {:class "form__error"}
+              password]]
+            [:div {:class "form__item"}
+             [:label {:class "form__label" :for "password"}
+              "Confirm Password"]
+             [:input {:class "form__input" :type "password" :name "member/confirm-password" :id "confirm-password" :required "required"}]
+             [:div {:class "form__error"}
+              confirm-password]]
+            [:div {:class "form__item form__item--full"}
+             [:label {:class "form__label" :for "plan"}
+              "Billing"]
+             [:select {:name "plan" :class "form__select"}
+              [:option {:value "monthly"}
+               "Monthly - $20"]
+              [:option {:value "yearly"}
+               "Yearly - $200"]]]
+            [:div {:class "form__item form__item--full form__item--email"}
+               [:label {:class "form__label" :for "email"}
+                "Credit Card Number"]
+               [:input {:class "form__input" :type "text" :name "cc-number" :id "cc-number" :required "required"}]
+               [:div {:class "form__error"}
+                email]]
+            [:div {:class "form__item"}
+             [:label {:class "form__label" :for "cc-expiry"}
+              "MM/AA"]
+             [:input {:class "form__input" :type "text" :name "cc-number" :id "cc-expiry" :placeholder "/" :required "required"}]
+             [:div {:class "form__error"}]]
+            [:div {:class "form__item"}
+             [:label {:class "form__label" :for "cc-cvv"}
+              "CVV"]
+             [:input {:class "form__input" :type "text" :name "cc-cvv" :id "cc-cvv" :required "required"}]
+             [:div {:class "form__error"}]]
 
-     [:div {:class "form__item"}
-      [:label {:class "form__label" :for "password"}
-       "Password"]
-      [:input {:class "form__input" :type "password" :name "member/password" :id "password" :required "required"}]
-      [:div {:class "form__error"}
-       password]]
-
-     [:div {:class "form__item"}
-      [:label {:class "form__label" :for "password"}
-       "Confirm Password"]
-      [:input {:class "form__input" :type "password" :name "member/confirm-password" :id "confirm-password" :required "required"}]
-      [:div {:class "form__error"}
-       confirm-password]]
-
-     [:div {:class "form__item form__item--full form__item--actions"}
-      [:input {:class "form__button" :type "submit" :name "register" :value "Register"}]])]
 
 
-   [:p {:class "form-link-text"}
-    "Already have an account? "
-    [:a {:href (url-for :auth.login/view) :class "form-link"}
-     "Login"]]])
+            [:div {:class "form__item form__item--full form__item--actions"}
+             [:input {:class "form__button" :type "submit" :name "register" :value "Register"}]])]]
+
+    [:p {:class "form-link-text"}
+     "Already have an account? "
+     [:a {:href (url-for :auth.login/view) :class "form-link"}
+      "Login"]]]])
 
 (defn action [{:keys [params] :as request}]
   (let [[member errors] (-> (select-keys params [:member/email :member/password :member/confirm-password])
