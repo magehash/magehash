@@ -3,16 +3,14 @@
             [coast :refer [form action-for transact redirect url-for rescue validate queue]]
             [scraper]))
 
-(defn site-form [request]
+(defn site-form [{:keys [errors session]}]
   (form (action-for :site.new/action)
     (input :text {:name :site/url
-                  :classes (merge '{f -4 pa 3 br 1}
-                                  (when (some? (-> request :errors :site/url))
-                                    '{b [a --red]}))
+                  :class (str "f4 pa3 br1 " (if (some? (:site/url errors)) "ba b--red" "ba b--transparent"))
                   :placeholder "https://magehash.com"
                   :required true
                   :autofocus ""
-                  :value (-> request :session :site :site/url)})
+                  :value (-> session :site :site/url)})
 
     (submit {:class "bg-green white br1 mt2"} "Start Hashing")))
 

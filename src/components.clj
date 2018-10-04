@@ -102,16 +102,11 @@
    (label k (-> k name string/capitalize))))
 
 (defn input [k m]
-  (let [opts (dissoc m :classes)]
-    [:input (merge opts {:type (name k)
-                         :class (classes
-                                 (merge '{input-reset nil
-                                          outline -0
-                                          w -100
-                                          pa 2
-                                          b [a --transparent]}
-                                        (:classes m)))
-                         :name (qualified-name (:name m))})]))
+  [:input (merge m {:type (name k)
+                    :class (str "input-reset outline-0 w-100 pa2 ba b--black-20 " (:class m))
+                    :name (qualified-name (:name m))})])
+
+(def text (partial input :text))
 
 (defn submit
   ([m s]
