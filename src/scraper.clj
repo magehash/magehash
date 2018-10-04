@@ -7,7 +7,8 @@
             [coast :refer [q pull delete insert]])
   (:import [java.nio.charset Charset]
            [java.security MessageDigest]
-           [java.net URL]))
+           [java.net URL])
+  (:gen-class))
 
 (defn dom [url]
   (html/html-snippet
