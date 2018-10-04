@@ -3,6 +3,7 @@
             [org.httpkit.client :as http]
             [clojure.string :as string]
             [clojure.edn :as edn]
+            [clojure.set]
             [coast :refer [q pull delete insert]])
   (:import [java.nio.charset Charset]
            [java.security MessageDigest]
@@ -56,19 +57,23 @@
 
 (defn save-assets [url]
   (let [site (pull '[site/url site/id
-                     {:site/assets [asset/id]}]
+                     {:site/assets [asset/id asset/hash]}]
                    [:site/url url])
         assets (->> (scripts (:site/url site))
                     (map #(hash-map :asset/name (:name %)
                                     :asset/hash (:sha1 %)
                                     :asset/content (:content %)
-                                    :asset/site (:site/id site))))]
-    (when (some? (:site/assets site))
-      (delete (:site/assets site)))
-    (if (not (empty? assets))
-      (insert assets)
-      [])
-    (str "hashed " (count assets) " on site " url)))
+                                    :asset/site (:site/id site))))
+        old-hashes (set (map :asset/hash (:site/assets site)))
+        new-hashes (set (map :asset/hash assets))
+        diff-hashes (clojure.set/difference old-hashes new-hashes)]
+    (if (not (empty? diff-hashes))
+      (do
+        (delete (->> (:site/assets site)
+                     (map #(select-keys % [:asset/id]))))
+        (insert assets)
+        (str "hashed " (count assets) " on site " url))
+      (str "no changes for site " url))))
 
 (defn -main []
   (let [urls (->> (q '[:select site/url])

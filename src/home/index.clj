@@ -129,25 +129,6 @@
       [:div {:class "ph4-ns"}
        [:img {:src "/img/sync-lander.svg"}]]]]]])
 
-
-(defn save-assets [url]
-  (let [site (coast/pull '[site/url site/id
-                           {:site/assets [asset/id]}]
-                         [:site/url url])
-        assets (->> (scraper/scripts (:site/url site))
-                    (map #(hash-map :asset/name (:name %)
-                                    :asset/hash (:sha1 %)
-                                    :asset/content (:content %)
-                                    :asset/site (:site/id site))))]
-    (when (some? (:site/assets site))
-      (coast/delete (:site/assets site)))
-    (if (not (empty? assets))
-      (coast/insert assets)
-      [])))
-
-(comment
-  (coast/q '[:select jobs/id jobs/finished-at]))
-
 (defn action [request]
   (let [[site errors] (-> (:params request)
                           (select-keys [:site/url])
@@ -156,7 +137,7 @@
                           (transact)
                           (rescue))]
     (if (nil? errors)
-      (let [job (queue :home.index/save-assets (:site/url site))]
+      (let [job (queue :scraper/save-assets (:site/url site))]
         (-> (redirect (url-for :home))
             (assoc :session {:site (select-keys site [:site/id :site/url])
                              :job (select-keys job [:id])})))
