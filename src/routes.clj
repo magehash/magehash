@@ -1,5 +1,15 @@
 (ns routes
-  (:require [coast :refer [pull raise unauthorized wrap-routes]]))
+  (:require [coast :refer [pull raise unauthorized wrap-routes]]
+            [error.not-found]))
+
+(defn wrap-admin [handler]
+  (fn [{{:keys [member/email]} :session :as request}]
+    (let [member (pull [:member/id :member/email]
+                       [:member/email email])]
+      ; TODO add boolean admin column on member table
+      (if (contains? #{"swlkr@fastmail.com" "me@ferrucc.io" "ferruccio.balestreri@gmail.com"} (:member/email member))
+        (handler (merge request member))
+        (error.not-found/view request)))))
 
 (defn wrap-auth [handler]
   (fn [{{:keys [member/email]} :session :as request}]
@@ -7,7 +17,10 @@
                        [:member/email email])]
       (if (some? member)
         (handler (merge request member))
-        (raise {:404 true})))))
+        (error.not-found/view request)))))
+
+(def admin (wrap-routes wrap-admin
+            [[:get "/admin/dashboard" :admin.dashboard/view]]))
 
 (def private (wrap-routes wrap-auth
               [[:get "/dashboard" :home.dashboard/view :dashboard]
@@ -26,4 +39,4 @@
              [:post "/sign-in" :auth.login/action]
              [:post "/sign-out" :auth.sign-out/action]])
 
-(def routes (concat public private))
+(def routes (concat public private admin))
