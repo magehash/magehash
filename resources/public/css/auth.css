@@ -260,3 +260,14 @@ main {
 	    grid-column: 1 / span 1;
 	}
 }
+
+.pitch__features{
+	border-radius: 20px;
+}
+
+.form__select {
+	border-radius: 5px;
+	height: 3rem;
+	background-color: white;
+	border: none;
+}
