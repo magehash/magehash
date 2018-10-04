@@ -3,6 +3,7 @@
                "app.css"
                "admin.css"]
  "bundle.js" ["jquery-3.3.1.min.js"
+              "sweetalert.min.js"
               "app.js"]
  "auth.css" ["tachyons.min.css"
              "auth.css"]

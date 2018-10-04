@@ -25,4 +25,25 @@ function assets(count) {
 
 $(function() {
   assets(1);
+
+  $(document).on("click", "[data-confirm]", function(e) {
+    e.preventDefault();
+    var el = e.target;
+    var $this = $(this);
+
+    swal({
+      title: el.getAttribute("data-title") || "Are you sure?",
+      text: el.getAttribute("data-text") || "If you click Yes, it will be deleted.",
+      icon: el.getAttribute("data-icon") || "warning",
+      buttons: {
+        cancel: el.getAttribute("data-cancel") || "No",
+        confirm: el.getAttribute("data-confirm-button") || "Yes",
+      }
+    })
+    .then(function(confirm) {
+      if (confirm) {
+        $this.submit();
+      }
+    });
+  })
 })
