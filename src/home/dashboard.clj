@@ -1,53 +1,74 @@
-(ns home.dashboard)
+(ns home.dashboard
+  (:require [coast :refer [action-for pull url-for]]
+            [coast.time :as time]
+            [components :refer [a]]))
 
-(defn view [request]
-  [:div {:class "cf ph2-ns dashboard-content"}
-   [:div {:class "fl w-100 w-25-ns pa2 dash__sidebar"}
-    [:ul {:class "list pl0 menu__list"}
-     [:a {:href "/dash"}
-      [:li {:class "menu__list-element"}
-       [:img {:src "/img/internet.svg", :height "20px"}]
-       [:span {:class "ml1"}
-        "Websites"]]]
+(defn view [{member-id :member/id}]
+  (let [{properties :member/properties} (pull '[{:member/properties
+                                                 [property/id
+                                                  {:property/site
+                                                   [site/id site/url
+                                                    {:site/assets [asset/id asset/name asset/hash asset/created-at]}]}]}]
+                                              [:member/id member-id])]
+    [:div {:class "cf ph2-ns dashboard-content"}
+     [:div {:class "fl w-100 w-25-ns pa2 dash__sidebar"}
+      [:ul {:class "list pl0 menu__list"}
+       [:a {:href (url-for :dashboard)}
+        [:li {:class "menu__list-element"}
+         [:img {:src "/img/internet.svg", :height "20px"}]
+         [:span {:class "ml1"}
+          "Websites"]]]
 
-     [:a {:href "/ckcch"}
-      [:li {:class "menu__list-element"}
-       [:img {:src "/img/settings.svg", :height "20px"}]
-       [:span {:class "ml1"}
-        "Settings"]]]
+       [:a {:href "/ckcch"}
+        [:li {:class "menu__list-element"}
+         [:img {:src "/img/settings.svg", :height "20px"}]
+         [:span {:class "ml1"}
+          "Settings"]]]
 
-     [:a {:href "/ciao"}
-      [:li {:class "menu__list-element"}
-       [:img {:src "/img/exit.svg", :height "20px", :fill "red"}]
-       [:span {:class "ml1"}
-        "Logout"]]]]]
+       [:a {:href "/ciao"}
+        [:li {:class "menu__list-element"}
+         [:img {:src "/img/exit.svg", :height "20px", :fill "red"}]
+         [:span {:class "ml1"}
+          "Logout"]]]]]
 
 
-   [:div {:class "fl w-100 w-75-ns pa2 dashboard__watch-websites-container"}
-    [:div {:class "cf ph2-ns"}
-     [:div {:class "fl w-100 w-75-ns pa2"}
-      [:h1 {:class "f3 dash-title"}
-       "Monitored Websites (2/100)"]
-      [:h2 {:class "f4 lh-title pt0 mid-gray fw3 dash-subtitle"}
-       "Your Websites"]]
+     [:div {:class "fl w-100 w-75-ns pa2 dashboard__watch-websites-container"}
+      [:div {:class "cf ph2-ns"}
+       [:div {:class "fl w-100 w-75-ns pa2"}
+        [:h1 {:class "f3 dash-title"}
+         "Monitored Websites " (str "( " (count properties)  " / 100)")]
+        [:h2 {:class "f4 lh-title pt0 mid-gray fw3 dash-subtitle"}
+         "Your Websites"]]
 
-     [:div {:class "fl w-100 w-25-ns pa2 mt4"}
-      [:a {:class "f6 link dim br-pill ph3 pv2 mb2 dib white bg-dark-blue button__add-website"}
-       "Add New Website"]]]
+       [:div {:class "fl w-100 w-25-ns pa2 mt4"}
+        [:a {:class "f6 link dim br-pill ph3 pv2 mb2 dib white bg-dark-blue button__add-website"
+             :href (url-for :property.create/view)}
+         "Add New Website"]]]
 
-    [:div {:class "dt dt--fixed"}
-     [:div {:class "dt-row"}
-      [:div {:class "dtc tc pv2 bg-light-gray"}
-       "Domain Name"]
-      [:div {:class "dtc tc pv2 bg-light-gray"}
-       "Monitoring Status"]
-      [:div {:class "dtc tc pv2 bg-light-gray"}
-       "Last Change Detected"]]
+      [:div {:class "dt dt--fixed"}
+       [:div {:class "dt-row"}
+        [:div {:class "dtc tc pv2 bg-light-gray"}
+         "Url"]
+        [:div {:class "dtc tc pv2 bg-light-gray"}
+         "# Assets"]
+        [:div {:class "dtc tc pv2 bg-light-gray"}
+         "Last Change Detected"]
+        [:div {:class "dtc tc pv2 bg-light-gray"}]]
 
-     [:div {:class "dt-row"}
-      [:div {:class "dtc tc pv2 bg-white"}
-       "google.com"]
-      [:div {:class "dtc tc pv2 bg-lightest-blue"}
-       "✅ Active"]
-      [:div {:class "dtc tc pv2 bg-white"}
-       "30 Sept. 2018 20:19:20"]]]]])
+       (for [{site :property/site :as p} properties]
+         [:div {:class "dt-row"}
+          [:div {:class "dtc tc pv2 bg-white"}
+           (:site/url site)]
+          [:div {:class "dtc tc pv2 bg-lightest-blue"}
+           (count (:site/assets site))]
+          [:div {:class "dtc tc pv2 bg-white"}
+           (->> (:site/assets site)
+                (map :asset/created-at)
+                (map time/parse)
+                (sort)
+                (last))]
+          [:div {:class "dtc tc pv2 bg-lightest-blue"}
+           (a {:action (action-for :property.delete/action p)
+               :class "link blue underline"
+               :data-confirm true}
+             "Delete")]])]]]))
