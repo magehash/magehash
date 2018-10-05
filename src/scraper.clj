@@ -4,10 +4,11 @@
             [clojure.edn :as edn]
             [clojure.set]
             [coast :refer [q pull transact]]
-            [etaoin.api :refer [chrome quit wait go js-execute]])
+            [clj-chrome-devtools.commands.dom :as dom]
+            [clj-chrome-devtools.automation :as chrome])
   (:import [java.nio.charset Charset]
            [java.security MessageDigest]
-           [java.net URI]
+           [java.net URI URL]
            [javax.net.ssl SSLEngine SSLParameters SNIHostName])
   (:gen-class))
 
@@ -31,39 +32,45 @@
     (.setServerNames ssl-params [(SNIHostName. (.getHost uri))])
     (.setSSLParameters ssl-engine ssl-params)))
 
-(defn external! [m]
-  (let [client (http/make-client {:ssl-configurer sni-configure})
-        {:keys [status body]} @(http/get (:src m) {:as :text :client client})]
+(defn host [url]
+  (let [url-obj (URL. url)]
+    (str (.getProtocol url-obj) "://" (.getHost url-obj))))
+
+(defn external! [s {:keys [src] :as m}]
+  (let [url (if (string/starts-with? src "http") src (str (host s) src))
+        client (http/make-client {:ssl-configurer sni-configure})
+        {:keys [status body]} @(http/get url {:as :text :client client})]
     (if (= 200 status)
       (assoc m :sha1 (sha1 (or body ""))
                :content body)
       (assoc m :sha1 nil
                :content (str "Error retrieving content: (" status ") " body)))))
 
+(defn script! [node]
+  (let [c (:connection @chrome/current-automation)
+        {:keys [attributes]} (dom/get-attributes c node)
+        {:strs [src]} (->> (partition 2 attributes)
+                           (mapv vec)
+                           (into {}))
+        content (chrome/text-of node)
+        m {:src src}]
+    (if (and (some? content)
+             (not (string/blank? content)))
+      (assoc m :content content)
+      m)))
+
 (defn tags! [url]
-  (let [driver (chrome {:headless true :path-driver "/usr/local/bin/chromedriver" :args ["--disable-dev-shm-usage --disable-gpu --disable-extensions --no-sandbox"]})
-        _ (go driver url)
-        results (js-execute driver "var elements = document.getElementsByTagName(\"script\");
-        var scripts = []
-
-        for (var i = 0; i < elements.length; i++) {
-          var el = elements[i];
-
-          if (el.src) {
-            scripts.push({src: el.src, name: el.src})
-          } else {
-            scripts.push({content: el.innerHTML, name: \"inline\"})
-          }
-        } return scripts;")]
-       _ (quit driver)
-    results))
+  (chrome/to url)
+  (->> (chrome/sel "script")
+       (mapv #(script! %))))
 
 (defn scripts! [url]
-  (let [script-tags (tags! url)
+  (let [_ (chrome/start!)
+        script-tags (tags! url)
         inline (->> (filter inline? script-tags)
                     (map inline))
         external (->> (filter #(not (inline? %)) script-tags)
-                      (map external!))]
+                      (map #(external! url %)))]
     (concat inline external)))
 
 (defn save-assets [url]
@@ -73,7 +80,7 @@
                      {:site/properties [{:property/member [member/email]}]}]
                    [:site/url url])
         assets (->> (scripts! (:site/url site))
-                    (map #(hash-map :asset/name (:name %)
+                    (map #(hash-map :asset/name (or (:src %) "inline")
                                     :asset/hash (:sha1 %)
                                     :asset/content (:content %)
                                     :asset/site (:site/id site))))
@@ -96,4 +103,5 @@
     (doall
       (for [url urls]
         (save-assets url)))
-    (transact {:cron/name "Asset Change Notifier"})))
+    (transact {:cron/name "Asset Change Notifier"})
+    (System/exit 0))) ; force devtools connection to close
