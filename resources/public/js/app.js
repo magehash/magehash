@@ -46,4 +46,16 @@ $(function() {
       }
     });
   })
+
+  $("time").each(function() {
+    var $this = $(this)
+    var s = $this.text();
+    var d = new Date(s);
+
+    if($this.data("date")) {
+      $this.text(d.toLocaleDateString())
+    } else {
+      $this.text(d.toLocaleDateString() + " " + d.toLocaleTimeString())
+    }
+  })
 })

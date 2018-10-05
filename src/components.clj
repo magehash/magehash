@@ -146,7 +146,7 @@
    children])
 
 (defn content [& children]
-  [:div {:class "pa3"}
+  [:div {:class "pa3 overflow-auto"}
    children])
 
 (defn title [& children]

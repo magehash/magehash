@@ -19,7 +19,8 @@
              (tr
                (td email)
                (td)
-               (td (time/fmt (time/local created-at) "MM/dd/YYYY"))
+               (td
+                [:time (.toInstant created-at)])
                (td))))]))))
 
 (defn properties-table [properties]
@@ -43,13 +44,13 @@
                (td email)
                (td url)
                (td (count assets))
-               (td (time/fmt (time/parse created-at) "MM/dd/YYYY"))
-               (td (time/fmt
+               (td [:time created-at])
+               (td [:time
                     (->> (map #(or (:asset/updated-at %) (:asset/created-at %)) assets)
                          (map time/parse)
+                         (map #(.toInstant %))
                          (sort)
-                         (last))
-                    "MM/dd/YYYY hh:mm:ss a")))))]))))
+                         (last))]))))]))))
 
 (defn jobs-table [jobs]
   (card
@@ -67,8 +68,8 @@
              (tr
                (td function)
                (td (str args))
-               (td (time/fmt (time/local created-at) "MM/dd/YYYY hh:mm:ss a"))
-               (td (time/fmt (time/local finished-at) "MM/dd/YYYY hh:mm:ss a")))))]))))
+               (td [:time (.toInstant created-at)])
+               (td [:time (.toInstant finished-at)]))))]))))
 
 (defn plural [s val]
   (if (= 1 val)
@@ -108,7 +109,7 @@
         cron (q '[:select cron/name cron/created-at cron/updated-at
                   :order cron/created-at desc
                          cron/updated-at desc])]
-    [:div {:class "pt6 mw8 center"}
+    [:div {:class "pt6 mw8 center ph3"}
      (members-table members)
      (properties-table (->> (map :member/properties members)
                             (mapcat identity)))
