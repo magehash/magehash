@@ -1,22 +1,15 @@
 (ns scraper
-  (:require [net.cgrand.enlive-html :as html]
-            [org.httpkit.client :as http]
+  (:require [org.httpkit.client :as http]
             [clojure.string :as string]
             [clojure.edn :as edn]
             [clojure.set]
-            [coast :refer [q pull transact]])
+            [coast :refer [q pull transact]]
+            [etaoin.api :refer [chrome quit wait go js-execute]])
   (:import [java.nio.charset Charset]
            [java.security MessageDigest]
-           [java.net URL])
+           [java.net URI]
+           [javax.net.ssl SSLEngine SSLParameters SNIHostName])
   (:gen-class))
-
-(defn dom [url]
-  (html/html-snippet
-    (:body @(http/get url))))
-
-(defn tags [url selector]
-  (-> (dom url)
-      (html/select selector)))
 
 (defn sha1 [s]
   (let [hashed
@@ -25,35 +18,52 @@
           (.update (.getBytes s "UTF-8")))]
     (format "%040x" (new java.math.BigInteger 1 (.digest hashed)))))
 
-(defn host [url]
-  (let [url-obj (URL. url)]
-    (str (.getProtocol url-obj) "://" (.getHost url-obj))))
-
-(defn inline? [{{:keys [src]} :attrs}]
-  (string/blank? src))
-
-(defn content [s]
-  (if (seq? s) (first s) s))
+(defn inline? [m]
+  (contains? m :content))
 
 (defn inline [m]
-  (let [new-content (content (:content m))]
-    (merge m {:content new-content
-              :name "inline"
-              :sha1 (sha1 (or new-content ""))})))
+  (assoc m :sha1 (sha1 (:content m))))
 
-(defn external [s {{:keys [src]} :attrs :as m}]
-  (let [url (if (string/starts-with? src "http") src (str s src))
-        body (:body @(http/get url {:as :text}))]
-    (merge m {:name src
-              :sha1 (sha1 (or body ""))})))
+; magic for sni ssl connections
+(defn sni-configure
+  [^SSLEngine ssl-engine ^URI uri]
+  (let [^SSLParameters ssl-params (.getSSLParameters ssl-engine)]
+    (.setServerNames ssl-params [(SNIHostName. (.getHost uri))])
+    (.setSSLParameters ssl-engine ssl-params)))
 
-(defn scripts [url]
-  (let [host-url (host url)
-        script-tags (tags url [:script])
+(defn external! [m]
+  (let [client (http/make-client {:ssl-configurer sni-configure})
+        {:keys [status body]} @(http/get (:src m) {:as :text :client client})]
+    (if (= 200 status)
+      (assoc m :sha1 (sha1 (or body ""))
+               :content body)
+      (assoc m :sha1 nil
+               :content (str "Error retrieving content: (" status ") " body)))))
+
+(defn tags! [url]
+  (let [driver (chrome {:headless true})
+        _ (go driver url)
+        results (js-execute driver "var elements = document.getElementsByTagName(\"script\");
+        var scripts = []
+
+        for (var i = 0; i < elements.length; i++) {
+          var el = elements[i];
+
+          if (el.src) {
+            scripts.push({src: el.src, name: el.src})
+          } else {
+            scripts.push({content: el.innerHTML, name: \"inline\"})
+          }
+        } return scripts;")]
+       _ (quit driver)
+    results))
+
+(defn scripts! [url]
+  (let [script-tags (tags! url)
         inline (->> (filter inline? script-tags)
                     (map inline))
         external (->> (filter #(not (inline? %)) script-tags)
-                      (map #(external host-url %)))]
+                      (map external!))]
     (concat inline external)))
 
 (defn save-assets [url]
@@ -62,7 +72,7 @@
                                     asset/content asset/site]}
                      {:site/properties [{:property/member [member/email]}]}]
                    [:site/url url])
-        assets (->> (scripts (:site/url site))
+        assets (->> (scripts! (:site/url site))
                     (map #(hash-map :asset/name (:name %)
                                     :asset/hash (:sha1 %)
                                     :asset/content (:content %)
