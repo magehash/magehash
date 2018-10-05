@@ -1,6 +1,7 @@
 (ns components
   (:require [coast :refer [action-for form css js url-for]]
-            [clojure.string :as string]))
+            [clojure.string :as string])
+  (:gen-class))
 
 (defn icon
   ([n opts]

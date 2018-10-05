@@ -4,7 +4,8 @@
 
 (defn view [{{:member/keys [email password confirm-password]} :errors}]
   [:main
-   [:img {:class "auth__logo mw-100" :src "/img/logo-auth.png"}]
+   [:a {:href (url-for :home)}
+    [:img {:class "auth__logo mw-100" :src "/img/logo-auth.png"}]]
    [:div {:class "mw9 center ph3-ns"}
          [:div {:class "cf ph2-ns bg-white br4"}
           [:div {:class "auth-content fl w-50-l pa4 black"}

@@ -6,7 +6,8 @@
              {email-error :member/email
               password-error :member/password} :errors}]
   [:main
-   [:img {:class "auth__logo mw-100" :src "/img/logo-auth.png"}]
+   [:a {:href (url-for :home)}
+    [:img {:class "auth__logo mw-100" :src "/img/logo-auth.png"}]]
    [:div {:class "auth-content"}
     (form (merge (action-for ::action)
                  {:class "auth__form"})
