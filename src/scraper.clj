@@ -4,8 +4,10 @@
             [clojure.edn :as edn]
             [clojure.set]
             [coast :refer [q pull transact]]
-            [clj-chrome-devtools.commands.dom :as dom]
-            [clj-chrome-devtools.automation :as chrome]
+            [clj-chrome-devtools.commands.page :as page]
+            [clj-chrome-devtools.core :as chrome.core]
+            [clj-chrome-devtools.commands.runtime :as runtime]
+            [clojure.data.json :as json]
             [clojure.stacktrace :as st])
   (:import [java.nio.charset Charset]
            [java.security MessageDigest]
@@ -47,27 +49,27 @@
       (assoc m :sha1 nil
                :content (str "Error retrieving content: (" status ") " body)))))
 
-(defn script! [node]
-  (let [c (:connection @chrome/current-automation)
-        {:keys [attributes]} (dom/get-attributes c node)
-        {:strs [src]} (->> (partition 2 attributes)
-                           (mapv vec)
-                           (into {}))
-        content (chrome/text-of node)
-        m {:src src}]
-    (if (and (some? content)
-             (not (string/blank? content)))
-      (assoc m :content content)
-      m)))
+(defn tags! [c url]
+  (json/read-str
+   (:value (:result (runtime/evaluate c {:expression "var elements = document.scripts;
+      var scripts = [];
 
-(defn tags! [url]
-  (chrome/to url)
-  (->> (chrome/sel "script")
-       (mapv #(script! %))))
+      for (var i = 0; i < elements.length; i++) {
+        var el = elements[i];
+
+        if (el.src) {
+          scripts.push({src: el.src})
+        } else {
+          scripts.push({content: el.innerHTML})
+        }
+      } JSON.stringify(scripts);"})))
+   :key-fn keyword))
 
 (defn scripts! [url]
-  (let [_ (chrome/start!)
-        script-tags (tags! url)
+  (let [c (chrome.core/connect "localhost" 9222)
+        _ (page/navigate c {:url url})
+        _ (Thread/sleep 5000) ; dirty hack to let the script tags load
+        script-tags (tags! c url)
         inline (->> (filter inline? script-tags)
                     (map inline))
         external (->> (filter #(not (inline? %)) script-tags)
