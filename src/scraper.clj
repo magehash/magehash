@@ -5,7 +5,8 @@
             [clojure.set]
             [coast :refer [q pull transact]]
             [clj-chrome-devtools.commands.dom :as dom]
-            [clj-chrome-devtools.automation :as chrome])
+            [clj-chrome-devtools.automation :as chrome]
+            [clojure.stacktrace :as st])
   (:import [java.nio.charset Charset]
            [java.security MessageDigest]
            [java.net URI URL]
@@ -74,28 +75,35 @@
     (concat inline external)))
 
 (defn save-assets [url]
-  (let [site (pull '[site/url site/id
-                     {:site/assets [asset/id asset/hash asset/name
-                                    asset/content asset/site]}
-                     {:site/properties [{:property/member [member/email]}]}]
-                   [:site/url url])
-        assets (->> (scripts! (:site/url site))
-                    (map #(hash-map :asset/name (or (:src %) "inline")
-                                    :asset/hash (:sha1 %)
-                                    :asset/content (:content %)
-                                    :asset/site (:site/id site))))
-        old (set (map #(dissoc % :asset/id) (:site/assets site)))
-        new (set assets)
-        changed-assets (clojure.set/difference new old)]
-    (if (empty? changed-assets)
-      (str "no changes for site " url)
-      (do
-        (transact {:site/id (:site/id site)
-                   :site/assets []})
-        (transact {:site/id (:site/id site)
-                   :site/assets new})
-        ;(email {:to member-email :from "sean@magehash.com" :html (emails.change/html changed-assets) :text (emails.change/text changed-assets)})
-        (str "hashed " (count assets) " on site " url)))))
+  (try
+    (let [site (pull '[site/url site/id
+                       {:site/assets [asset/id asset/hash asset/name
+                                      asset/content asset/site]}
+                       {:site/properties [{:property/member [member/email]}]}]
+                     [:site/url url])
+          assets (->> (scripts! (:site/url site))
+                      (map #(hash-map :asset/name (or (:src %) "inline")
+                                      :asset/hash (:sha1 %)
+                                      :asset/content (:content %)
+                                      :asset/site (:site/id site))))
+          old (set (map #(dissoc % :asset/id) (:site/assets site)))
+          new (set assets)
+          changed-assets (clojure.set/difference new old)]
+      (if (empty? changed-assets)
+        (str "no changes for site " url)
+        (do
+          (transact {:site/id (:site/id site)
+                     :site/assets []})
+          (transact {:site/id (:site/id site)
+                     :site/assets new})
+          ;(email {:to member-email :from "sean@magehash.com" :html (emails.change/html changed-assets) :text (emails.change/text changed-assets)})
+          (str "hashed " (count assets) " on site " url))))
+    (catch Exception e
+      (println "Url" url)
+      (println "Message" (.getMessage e))
+      (println "Data" (ex-data e))
+      (println "Stacktrace" (with-out-str
+                             (st/print-stack-trace e))))))
 
 (defn -main []
   (let [urls (->> (q '[:select site/url])
