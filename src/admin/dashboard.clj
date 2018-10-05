@@ -69,7 +69,9 @@
                (td function)
                (td (str args))
                (td [:time (.toInstant created-at)])
-               (td [:time (.toInstant finished-at)]))))]))))
+               (if (nil? finished-at)
+                 (td)
+                 (td [:time (.toInstant finished-at)])))))]))))
 
 (defn plural [s val]
   (if (= 1 val)
