@@ -41,7 +41,7 @@
                :content (str "Error retrieving content: (" status ") " body)))))
 
 (defn tags! [url]
-  (let [driver (chrome {:headless true})
+  (let [driver (chrome {:headless true :args ["--disable-dev-shm-usage"]})
         _ (go driver url)
         results (js-execute driver "var elements = document.getElementsByTagName(\"script\");
         var scripts = []
