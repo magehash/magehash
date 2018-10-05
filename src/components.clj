@@ -120,3 +120,36 @@
 (defn error [s]
   [:small {:class "f6 db red"}
    s])
+
+(defn table [& children]
+  [:table {:class "f6 w-100"}
+   children])
+
+(defn th [& children]
+  [:th {:class "fw6 tl pa3 bg-white"}
+   children])
+
+(defn tr [& children]
+  [:tr {:class "stripe-dark"}
+   children])
+
+(defn td [& children]
+  [:td {:class "pa3"}
+   children])
+
+(defn tbody [& children]
+  [:tbody {:class "lh-copy"}
+   children])
+
+(defn card [& children]
+  [:div {:class "bg-white br2 shadow-4 mb4"}
+   children])
+
+(defn content [& children]
+  [:div {:class "pa3"}
+   children])
+
+(defn title [& children]
+  [:div {:class "f3-ns f5 lh-title bb b--black-10"}
+   [:div {:class "pa3"}
+    children]])
