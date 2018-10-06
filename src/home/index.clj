@@ -18,33 +18,34 @@
   (let [{{:keys [job site]} :session} request]
     [:div
      [:div {:id "site" :data-url (url-for :asset/list {:job-id (str (:id job))
-                                                       :id (:site/id site)})}]
-     [:div {:id "assets"}
-      "Hashing in progress..."]]))
+                                                       :id (:site/id site)})}]]))
 
 (defn hero [request]
   [:div {:class "hero bg-purple-gradient relative white pb4"}
    [:div {:class "mw9 center ph3 pt7 hero-title__mobile"}
     [:div {:class "pb3"}
-     [:div {:class "f-headline-l fw6 tc-ns f1 white"} "Watch your assets"]
-     [:div {:class "f3-ns f4 tc-ns lh-copy white-80 center"}
-      "Hash your js hourly and get notified of changes"]]
+     [:div {:class "f-headline-l fw6 tc-ns f1 white"} "Integrity for static assets"]
+     [:div {:class "f3-ns f4 tc-ns lh-copy white-80 center pt3"}
+      "Keep track of changes in your static files and get alerted when intrusions happen"]
+     [:div {:class "pt4 pb4"}
+      [:div {:class "mw6 center cf tc"}
+       [:a {:class "no-underline dib mr3 w4 br-pill bg-blue ba bw1 b--blue tc grow ph3 pv2 white pointer"
+            :href (url-for :auth.signup/view)}
+         "Sign Up"]
 
+       [:a {:class "no-underline dib w4 br-pill ba b--white bw1 bg-transparent tc grow ph3 pv2 white pointer"
+            :href "#learn-more"}
+         "Why?"]]]]
     [:div {:class "cf"}
      [:div {:class "fl w-third-ns w-100"}
       [:div {:class "pa2 mh2-ns"}]]
-     [:div {:class "fl w-third-ns w-100"}
-      [:div {:class "pa2"}
-       (site-form request)
-       (when (some? (-> request :session :site))
-        (site-assets request))]]]]
+     [:div {:class "fl w-third-ns w-100"}]]]
    [:img {:class "mw2 pt6 caret_home" :src "/img/caret.svg"}]])
 
 (defn view [request]
   [:div
    (hero request)
-
-   [:div {:class "bg-white pv4 ph3 pv6_mobile"}
+   [:div {:class "bg-white pv4 ph3 pv6_mobile" :id "learn-more"}
     [:div {:class "mb5"}
        [:div {:class "tc pb5"}
         [:h4 {:class "f1 explainer-title"} "Why?"

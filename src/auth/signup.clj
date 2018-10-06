@@ -3,14 +3,14 @@
             [buddy.hashers :as hashers]))
 
 (defn view [{{:member/keys [email password confirm-password]} :errors}]
-  [:main
+  [:div
    [:a {:href (url-for :home)}
     [:img {:class "auth__logo mw-100" :src "/img/logo-auth.png"}]]
-   [:div {:class "mw9 center ph3-ns"}
+   [:div {:class "mw9 center ph3-ns pa3 mw8-l"}
          [:div {:class "cf ph2-ns bg-white br4"}
           [:div {:class "auth-content fl w-50-l pa4 black"}
            [:div {:class "pitch"}
-            [:h1 "We are on a mission to build the ultimate front end security platform."]
+            [:h1 "Building the ultimate front-end security platform."]
             [:p "We take care of making sure that nothing bad happens when users connect to your website."]
             [:p "Our tools include:"]
             [:div {:class "pt1 pb1 pl3 pr3 br-4 pitch__features"}
