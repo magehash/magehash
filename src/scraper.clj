@@ -7,6 +7,7 @@
             [clj-chrome-devtools.commands.page :as page]
             [clj-chrome-devtools.core :as chrome.core]
             [clj-chrome-devtools.commands.runtime :as runtime]
+            [clj-chrome-devtools.events :as events]
             [clojure.data.json :as json]
             [clojure.stacktrace :as st])
   (:import [java.nio.charset Charset]
@@ -67,8 +68,9 @@
 
 (defn scripts! [url]
   (let [c (chrome.core/connect "localhost" 9222)
-        _ (page/navigate c {:url url})
-        _ (Thread/sleep 5000) ; dirty hack to let the script tags load
+        _ (page/enable c {})
+        _ (events/with-event-wait c :page :dom-content-event-fired 30000
+            (page/navigate c {:url url}))
         script-tags (tags! c url)
         inline (->> (filter inline? script-tags)
                     (map inline))
