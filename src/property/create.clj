@@ -24,7 +24,7 @@
                                           (rescue))]
     (if (nil? errors)
       (do
-        (queue :scraper/save-assets site-url)
+        (queue :scraper/-main site-url)
         (transact {:member/id member-id
                    :member/properties [{:property/site [:site/id site-id]}]})
         (redirect (url-for :dashboard)))

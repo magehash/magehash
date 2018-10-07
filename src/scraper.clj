@@ -66,26 +66,26 @@
       } JSON.stringify(scripts);"})))
    :key-fn keyword))
 
-(defn scripts! [url]
-  (let [c (chrome.core/connect "localhost" 9222)
-        _ (page/enable c {})
-        _ (events/with-event-wait c :page :dom-content-event-fired 30000
+(defn scripts! [c url]
+  (println "[scraper/scripts!] Attempting to get script tags from " url)
+  (let [_ (events/with-event-wait c :page :dom-content-event-fired 30000
             (page/navigate c {:url url}))
         script-tags (tags! c url)
+        _ (println "[scraper/scripts!] Scraped " (count script-tags) " from " url)
         inline (->> (filter inline? script-tags)
                     (map inline))
         external (->> (filter #(not (inline? %)) script-tags)
                       (map #(external! url %)))]
     (concat inline external)))
 
-(defn save-assets [url]
+(defn save-assets [c url]
   (try
     (let [site (pull '[site/url site/id
                        {:site/assets [asset/id asset/hash asset/name
                                       asset/content asset/site]}
                        {:site/properties [{:property/member [member/email]}]}]
                      [:site/url url])
-          assets (->> (scripts! (:site/url site))
+          assets (->> (scripts! c (:site/url site))
                       (map #(hash-map :asset/name (or (:src %) "inline")
                                       :asset/hash (:sha1 %)
                                       :asset/content (:content %)
@@ -94,14 +94,14 @@
           new (set assets)
           changed-assets (clojure.set/difference new old)]
       (if (empty? changed-assets)
-        (str "no changes for site " url)
+        (println "[scraper/save-assets] No changes for site " url)
         (do
           (transact {:site/id (:site/id site)
                      :site/assets []})
           (transact {:site/id (:site/id site)
                      :site/assets new})
           ;(email {:to member-email :from "sean@magehash.com" :html (emails.change/html changed-assets) :text (emails.change/text changed-assets)})
-          (str "hashed " (count assets) " on site " url))))
+          (println "[scraper/save-assets] Hashed " (count assets) " assets from site " url))))
     (catch Exception e
       (println "Url" url)
       (println "Message" (.getMessage e))
@@ -109,11 +109,14 @@
       (println "Stacktrace" (with-out-str
                              (st/print-stack-trace e))))))
 
-(defn -main []
-  (let [urls (->> (q '[:select site/url])
-                  (map :site/url))]
+(defn -main [& [url]]
+  (let [c (chrome.core/connect "localhost" 9222)
+        _ (page/enable c {})
+        urls (if (some? url)
+               [url]
+               (->> (q '[:select site/url])
+                    (map :site/url)))]
     (doall
       (for [url urls]
-        (save-assets url)))
-    (transact {:cron/name "Asset Change Notifier"})
-    (System/exit 0))) ; force devtools connection to close
+        (save-assets c url)))
+    (transact {:cron/name "Asset Change Notifier"})))

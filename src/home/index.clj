@@ -138,7 +138,7 @@
                           (transact)
                           (rescue))]
     (if (nil? errors)
-      (let [job (queue :scraper/save-assets (:site/url site))]
+      (let [job (queue :scraper/-main (:site/url site))]
         (-> (redirect (url-for :home))
             (assoc :session {:site (select-keys site [:site/id :site/url])
                              :job (select-keys job [:id])})))
