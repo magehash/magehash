@@ -62,11 +62,12 @@
           [:div {:class "dtc tc pv2 dashboard__table-content-desktop bg-white"}
            (count (:site/assets site))]
           [:div {:class "dtc tc pv2 dashboard__table-content-desktop bg-white"}
-           (->> (:site/assets site)
-                (map :asset/created-at)
-                (map time/parse)
-                (sort)
-                (last))]
+           [:time (->> (:site/assets site)
+                       (map :asset/created-at)
+                       (map time/parse)
+                       (sort)
+                       (last)
+                       (.toInstant))]]
           [:div {:class "dtc tc pv2 dashboard__table-content-desktop bg-white"}
            (a {:action (action-for :property.delete/action p)
                :class "link blue underline"
@@ -89,9 +90,10 @@
            [:time
             (->> (:site/assets site)
                 (map :asset/created-at)
-                (map #(.toInstant %))
+                (map time/parse)
                 (sort)
-                (last))]]]
+                (last)
+                (.toInstant))]]]
          [:div {:class "fr"}
           (a {:action (action-for :property.delete/action p)
               :class "cf link white bg-gray dim br-pill ph3 pv2"
