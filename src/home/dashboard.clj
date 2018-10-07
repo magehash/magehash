@@ -65,9 +65,9 @@
            [:time (->> (:site/assets site)
                        (map :asset/created-at)
                        (map time/parse)
+                       (map #(.toInstant %))
                        (sort)
-                       (last)
-                       (.toInstant))]]
+                       (last))]]
           [:div {:class "dtc tc pv2 dashboard__table-content-desktop bg-white"}
            (a {:action (action-for :property.delete/action p)
                :class "link blue underline"
@@ -91,9 +91,9 @@
             (->> (:site/assets site)
                 (map :asset/created-at)
                 (map time/parse)
+                (map #(.toInstant %))
                 (sort)
-                (last)
-                (.toInstant))]]]
+                (last))]]]
          [:div {:class "fr"}
           (a {:action (action-for :property.delete/action p)
               :class "cf link white bg-gray dim br-pill ph3 pv2"
