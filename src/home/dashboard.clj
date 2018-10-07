@@ -86,11 +86,12 @@
          [:div
           [:p
            [:span {:class "b"} "Last Change Detected:  "]
-           (->> (:site/assets site)
-               (map :asset/created-at)
-               (map time/parse)
-               (sort)
-               (last))]]
+           [:time
+            (->> (:site/assets site)
+                (map :asset/created-at)
+                (map #(.toInstant %))
+                (sort)
+                (last))]]]
          [:div {:class "fr"}
           (a {:action (action-for :property.delete/action p)
               :class "cf link white bg-gray dim br-pill ph3 pv2"
