@@ -29,31 +29,31 @@
                 "Uptime Monitoring"] "- So you can always be avaiable to your users"]
               [:li {:class "mt3 mb3"}
                [:strong "..and many more features are on the way"]]]]]]
-          [:div {:class "fl w-50-l w-100"}
+          [:div {:class "fl w-50-l w-100 register__form-background"}
            (form (merge (action-for ::action)
                         {:class "auth__form mb0 register__form"})
             [:div {:class "form__title"}
              [:p "Create an account"]]
-            [:div {:class "form__item form__item--full form__item--email"}
+            [:div {:class "form__item form__item--full form__item--email form__item--register"}
              [:label {:class "form__label" :for "email"}
               "Email Address"]
              [:input {:class "form__input" :type "email" :name "member/email" :id "email" :required "required"}]
              [:div {:class "form__error"}
               email]]
 
-            [:div {:class "form__item"}
+            [:div {:class "form__item form__item--register fl w-50-l pr1-l"}
              [:label {:class "form__label" :for "password"}
               "Password"]
              [:input {:class "form__input" :type "password" :name "member/password" :id "password" :required "required"}]
              [:div {:class "form__error"}
               password]]
-            [:div {:class "form__item"}
+            [:div {:class "form__item form__item--register fl w-50-l pl1-l"}
              [:label {:class "form__label" :for "password"}
               "Confirm Password"]
              [:input {:class "form__input" :type "password" :name "member/confirm-password" :id "confirm-password" :required "required"}]
              [:div {:class "form__error"}
               confirm-password]]
-            [:div {:class "form__item form__item--full"}
+            [:div {:class "form__item form__item--full form__item--register w-100-l"}
              [:label {:class "form__label" :for "plan"}
               "Billing"]
              [:select {:name "plan" :class "form__select"}
@@ -61,18 +61,18 @@
                "Monthly - $20"]
               [:option {:value "yearly"}
                "Yearly - $200"]]]
-            [:div {:class "form__item form__item--full form__item--email"}
+            [:div {:class "form__item form__item--full form__item--register"}
                [:label {:class "form__label" :for "email"}
                 "Credit Card Number"]
                [:input {:class "form__input" :type "text" :name "cc-number" :id "cc-number" :required "required"}]
                [:div {:class "form__error"}
                 email]]
-            [:div {:class "form__item"}
+            [:div {:class "form__item form__item--register fl w-50-l pr1-l"}
              [:label {:class "form__label" :for "cc-expiry"}
               "MM/AA"]
              [:input {:class "form__input" :type "text" :name "cc-number" :id "cc-expiry" :placeholder "/" :required "required"}]
              [:div {:class "form__error"}]]
-            [:div {:class "form__item"}
+            [:div {:class "form__item form__item--register fl w-50-l pl1-l"}
              [:label {:class "form__label" :for "cc-cvv"}
               "CVV"]
              [:input {:class "form__input" :type "text" :name "cc-cvv" :id "cc-cvv" :required "required"}]
@@ -80,7 +80,7 @@
 
 
 
-            [:div {:class "form__item form__item--full form__item--actions"}
+            [:div {:class "form__item form__item--full form__item--actions fl w-100 mb3"}
              [:input {:class "form__button" :type "submit" :name "register" :value "Register"}]])]]
 
     [:p {:class "form-link-text"}

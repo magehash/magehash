@@ -269,6 +269,16 @@ main {
 	.register__form {
 		border-radius: 0;
 		margin-right: 0;
+		display: block;
+		box-shadow: none;
+	}
+	.form__item--register{
+		margin-top: 1rem;
+		margin-bottom: 2rem;
+		background-color: #f4f5f7;
+	}
+	.register__form-background{
+		background-color: #f4f5f7;
 	}
 }
 
