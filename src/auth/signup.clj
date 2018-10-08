@@ -17,18 +17,18 @@
              [:ul {:class "list pl3"}
               [:li {:class "mt3 mb3"}
                "🛡"
-               [:strong {:class "ml2"}
-                "Static Assets Integrity Protection"] "- So now one can hijack your payments and authentications"]
+               [:strong {:class "ml2" }
+                "Static Assets Integrity Protection"] "- So no one can hijack your payments and authentication pages."]
               [:li {:class "mt3 mb3"}
                "🔜🔐"
                [:strong {:class "ml2"}
-                "TLS Certificate Verification"] "- So you can stay safe from MITM attacks"]
+                "TLS Certificate Verification"] "- So you can stay safe from MITM attacks!"]
               [:li {:class "mt3 mb3"}
                "🔜📈"
                [:strong {:class "ml2"}
-                "Uptime Monitoring"] "- So you can always be avaiable to your users"]
+                "Uptime Monitoring"] "- So you can always be available to your users"]
               [:li {:class "mt3 mb3"}
-               [:strong "..and many more features are on the way"]]]]]]
+               [:strong "..and many more on the way"]]]]]]
           [:div {:class "fl w-50-l w-100 register__form-background"}
            (form (merge (action-for ::action)
                         {:class "auth__form mb0 register__form"})
