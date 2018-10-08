@@ -3,7 +3,9 @@
  {org.clojure/clojure {:mvn/version "1.9.0"}
   coast-framework/coast.eta {:mvn/version "1.0.3"}
   buddy/buddy-hashers {:mvn/version "1.3.0"}
-  clj-chrome-devtools {:mvn/version "20180528"}}
+  clj-chrome-devtools {:mvn/version "20180528"}
+  com.draines/postal {:mvn/version "2.0.2"}}
+
  :mvn/repos {"central" {:url "https://repo1.maven.org/maven2/"}
              "clojars" {:url "https://repo.clojars.org/"}}
 
