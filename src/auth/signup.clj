@@ -17,7 +17,7 @@
              [:ul {:class "list pl3"}
               [:li {:class "mt3 mb3"}
                "🛡"
-               [:strong {:class "ml2" }
+               [:strong {:class "ml2"}
                 "Static Assets Integrity Protection"] "- So no one can hijack your payments and authentication pages."]
               [:li {:class "mt3 mb3"}
                "🔜🔐"
@@ -77,9 +77,6 @@
               "CVV"]
              [:input {:class "form__input" :type "text" :name "cc-cvv" :id "cc-cvv" :required "required"}]
              [:div {:class "form__error"}]]
-
-
-
             [:div {:class "form__item form__item--full form__item--actions fl w-100 mb3"}
              [:input {:class "form__button" :type "submit" :name "register" :value "Register"}]])]]
 
