@@ -86,9 +86,18 @@
           new (set assets)
           changed-assets (clojure.set/difference new old)
           member-email (-> site :site/properties first :property/member :member/email)]
-      (if (or (empty? changed-assets)
-              (empty? old))
+      (cond
+        (and (empty? old) ; new site, don't send alert
+             (not (empty? new)))
+        (do
+          (transact {:site/id (:site/id site)
+                     :site/assets new})
+          (println "[scraper/save-assets] Hashed" (count assets) "asset(s) from brand ✨ new ✨ site" url))
+
+        (empty? changed-assets) ; nothing changed, don't send alert
         (println "[scraper/save-assets] No changes for site" url)
+
+        :else
         (do
           (transact {:site/id (:site/id site)
                      :site/assets []})
