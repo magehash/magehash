@@ -1,0 +1,3 @@
+{:known-macros [chrome/with-connection]
+ :rules {:if-without-else true
+         :no-forms-threading false}}
