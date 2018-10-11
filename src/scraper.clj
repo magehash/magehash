@@ -3,13 +3,11 @@
             [clojure.string :as string]
             [clojure.edn :as edn]
             [clojure.set]
-            [coast :refer [q pull transact]]
-            [clj-chrome-devtools.commands.page :as page]
-            [clj-chrome-devtools.core :as chrome.core]
-            [clj-chrome-devtools.commands.runtime :as runtime]
-            [clj-chrome-devtools.events :as events]
+            [clojure.java.io :as io]
+            [coast :refer [q pull transact uuid]]
             [clojure.data.json :as json]
-            [clojure.stacktrace :as st])
+            [clojure.stacktrace :as st]
+            [chrome])
   (:import [java.nio.charset Charset]
            [java.security MessageDigest]
            [java.net URI URL]
@@ -24,7 +22,7 @@
     (format "%040x" (new java.math.BigInteger 1 (.digest hashed)))))
 
 (defn inline? [m]
-  (contains? m :content))
+  (not (string/blank? (:content m))))
 
 (defn inline [m]
   (assoc m :sha1 (sha1 (:content m))))
@@ -50,42 +48,29 @@
       (assoc m :sha1 nil
                :content (str "Error retrieving content: (" status ") " body)))))
 
-(defn tags! [c url]
-  (json/read-str
-   (:value (:result (runtime/evaluate c {:expression "var elements = document.scripts;
-      var scripts = [];
-
-      for (var i = 0; i < elements.length; i++) {
-        var el = elements[i];
-
-        if (el.src) {
-          scripts.push({src: el.src})
-        } else {
-          scripts.push({content: el.innerHTML})
-        }
-      } JSON.stringify(scripts);"})))
-   :key-fn keyword))
-
-(defn scripts! [c url]
-  (println "[scraper/scripts!] Attempting to get script tags from " url)
-  (let [_ (events/with-event-wait c :page :dom-content-event-fired 30000
-            (page/navigate c {:url url}))
-        script-tags (tags! c url)
-        _ (println "[scraper/scripts!] Scraped " (count script-tags) " from " url)
-        inline (->> (filter inline? script-tags)
+(defn scripts! [tags url]
+  (let [inline (->> (filter inline? tags)
                     (map inline))
-        external (->> (filter #(not (inline? %)) script-tags)
+        external (->> (filter #(not (inline? %)) tags)
                       (map #(external! url %)))]
     (concat inline external)))
 
-(defn save-assets [c url]
+(defn save-assets [url]
   (try
     (let [site (pull '[site/url site/id
                        {:site/assets [asset/id asset/hash asset/name
                                       asset/content asset/site]}
                        {:site/properties [{:property/member [member/email]}]}]
                      [:site/url url])
-          assets (->> (scripts! c (:site/url site))
+          _ (println "[scraper/save-assets] Attempting to get script tags from " url)
+          tags (-> (chrome/with-connection [c "http://localhost:9222"]
+                     (chrome/navigate c {:url url :timeout 30000})
+                     (chrome/evaluate c "JSON.stringify([].slice.call(document.scripts).map(function(s) { return { src: s.src, content: s.innerHTML}}))"))
+                   :result :result :value
+                   (json/read-str :key-fn keyword)
+                   (scripts! url))
+          _ (println "[scraper/save-assets] Scraped" (count tags) "asset(s) from" url)
+          assets (->> tags
                       (map #(hash-map :asset/name (or (:src %) "inline")
                                       :asset/hash (:sha1 %)
                                       :asset/content (:content %)
@@ -109,14 +94,19 @@
       (println "Stacktrace" (with-out-str
                              (st/print-stack-trace e))))))
 
+(defn scrape
+  ([url]
+   (let [urls (if (some? url)
+                [url]
+                (->> (q '[:select site/url])
+                     (map :site/url)))]
+     (doall
+       (for [url urls]
+         (save-assets url)))
+     (transact {:cron/name "Asset Change Notifier"})))
+  ([]
+   (scrape nil)))
+
 (defn -main [& [url]]
-  (let [c (chrome.core/connect "localhost" 9222)
-        _ (page/enable c {})
-        urls (if (some? url)
-               [url]
-               (->> (q '[:select site/url])
-                    (map :site/url)))]
-    (doall
-      (for [url urls]
-        (save-assets c url)))
-    (transact {:cron/name "Asset Change Notifier"})))
+  (scrape url)
+  (System/exit 0))
