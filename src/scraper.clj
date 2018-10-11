@@ -7,7 +7,8 @@
             [coast :refer [q pull transact uuid]]
             [clojure.data.json :as json]
             [clojure.stacktrace :as st]
-            [chrome])
+            [chrome]
+            [mailer])
   (:import [java.nio.charset Charset]
            [java.security MessageDigest]
            [java.net URI URL]
@@ -55,6 +56,12 @@
                       (map #(external! url %)))]
     (concat inline external)))
 
+(defn fmt-asset [a]
+  (let [trimmed-content (if (= "inline" (:asset/name a))
+                          (str (subs (:asset/content a) 0 140) "...")
+                          "")]
+    (str "- [" (:asset/hash a) "] " (:asset/name a) "\n" trimmed-content)))
+
 (defn save-assets [url]
   (try
     (let [site (pull '[site/url site/id
@@ -77,16 +84,20 @@
                                       :asset/site (:site/id site))))
           old (set (map #(dissoc % :asset/id) (:site/assets site)))
           new (set assets)
-          changed-assets (clojure.set/difference new old)]
-      (if (empty? changed-assets)
-        (println "[scraper/save-assets] No changes for site " url)
+          changed-assets (clojure.set/difference new old)
+          member-email (-> site :site/properties first :property/member :member/email)]
+      (if (or (empty? changed-assets)
+              (empty? old))
+        (println "[scraper/save-assets] No changes for site" url)
         (do
           (transact {:site/id (:site/id site)
                      :site/assets []})
           (transact {:site/id (:site/id site)
                      :site/assets new})
-          ;(email {:to member-email :from "sean@magehash.com" :html (emails.change/html changed-assets) :text (emails.change/text changed-assets)})
-          (println "[scraper/save-assets] Hashed " (count assets) " assets from site " url))))
+          (mailer/mail :txt/alert member-email {:site/url url
+                                                :site/assets (->> (map fmt-asset changed-assets)
+                                                                  (string/join "\n\n"))})
+          (println "[scraper/save-assets] Hashed" (count assets) "asset(s) from site" url))))
     (catch Exception e
       (println "Url" url)
       (println "Message" (.getMessage e))

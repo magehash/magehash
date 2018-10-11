@@ -1,0 +1,8 @@
+Hey there,
+
+It's the team from magehash alerting you, we noticed :site/url was recently updated, here is the code that changed:
+
+:site/assets
+
+Your friends in the end,
+Team magehash

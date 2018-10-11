@@ -5,6 +5,7 @@
 ```bash
 git clone git@github.com:your-user-name/magehash.git
 cd magehash
+cp .env.fake .env # replace any values
 make db/create
 make db/migrate
 ```
