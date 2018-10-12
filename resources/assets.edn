@@ -6,7 +6,9 @@
               "sweetalert.min.js"
               "app.js"]
  "auth.css" ["tachyons.min.css"
-             "auth.css"]
+             "auth.css"
+             "checkout.css"]
  "auth.js" ["TweenMax.min.js"
             "nearby.js"
-            "auth.js"]}
+            "auth.js"
+            "checkout.js"]}

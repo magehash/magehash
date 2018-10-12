@@ -67,7 +67,10 @@
      [:link {:rel "apple-touch-icon" :sizes "180x180" :href "favicon_package/apple-touch-icon.png"}]
      [:link {:rel "mask-icon" :href "favicon_package/safari-pinned-tab.svg" :color "#5bbad5"}]
      (css (str (bundle-name request) ".css"))
-     (js (str (bundle-name request) ".js"))]
+     (js (str (bundle-name request) ".js"))
+     (when (or (= (:coast.router/name request) :auth.signup/view)
+               (= (:coast.router/name request) :auth.signup/action))
+       [:script {:src "https://js.stripe.com/v3/"}])]
     [:body {:class (body-class request)}
      (nav request)
      body]])

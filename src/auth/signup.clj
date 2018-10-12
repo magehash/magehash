@@ -1,6 +1,7 @@
 (ns auth.signup
   (:require [coast :refer [action-for form insert redirect rescue url-for validate]]
-            [buddy.hashers :as hashers]))
+            [buddy.hashers :as hashers]
+            [stripe]))
 
 (defn view [{{:member/keys [email password confirm-password]} :errors}]
   [:div
@@ -31,7 +32,8 @@
                [:strong "..and many more on the way"]]]]]]
           [:div {:class "fl w-50-l w-100 register__form-background"}
            (form (merge (action-for ::action)
-                        {:class "auth__form mb0 register__form"})
+                        {:class "auth__form mb0 register__form"
+                         :id "sign-up-form"})
             [:div {:class "form__title"}
              [:p "Create an account"]]
             [:div {:class "form__item form__item--full form__item--email form__item--register"}
@@ -56,27 +58,14 @@
             [:div {:class "form__item form__item--full form__item--register w-100-l"}
              [:label {:class "form__label" :for "plan"}
               "Billing"]
-             [:select {:name "plan" :class "form__select"}
-              [:option {:value "monthly"}
-               "Monthly - $20"]
-              [:option {:value "yearly"}
-               "Yearly - $200"]]]
+             [:div {:class "black-80 b"}
+               "$49/mo"]]
             [:div {:class "form__item form__item--full form__item--register"}
-               [:label {:class "form__label" :for "email"}
-                "Credit Card Number"]
-               [:input {:class "form__input" :type "text" :name "cc-number" :id "cc-number" :required "required"}]
-               [:div {:class "form__error"}
-                email]]
-            [:div {:class "form__item form__item--register fl w-50-l pr1-l"}
-             [:label {:class "form__label" :for "cc-expiry"}
-              "MM/AA"]
-             [:input {:class "form__input" :type "text" :name "cc-number" :id "cc-expiry" :placeholder "/" :required "required"}]
-             [:div {:class "form__error"}]]
-            [:div {:class "form__item form__item--register fl w-50-l pl1-l"}
-             [:label {:class "form__label" :for "cc-cvv"}
-              "CVV"]
-             [:input {:class "form__input" :type "text" :name "cc-cvv" :id "cc-cvv" :required "required"}]
-             [:div {:class "form__error"}]]
+             [:label {:class "form__label" :for "email"}
+              "Credit Card"]
+             [:div {:id "card-element"}]
+             [:div {:id "card-errors"}]]
+
             [:div {:class "form__item form__item--full form__item--actions fl w-100 mb3"}
              [:input {:class "form__button" :type "submit" :name "register" :value "Register"}]])]]
 
@@ -86,7 +75,8 @@
       "Login"]]]])
 
 (defn action [{:keys [params] :as request}]
-  (let [[member errors] (-> (select-keys params [:member/email :member/password :member/confirm-password])
+  (let [_ (stripe/subscribe params)
+        [member errors] (-> (select-keys params [:member/email :member/password :member/confirm-password])
                             (validate [[:required [:member/email :member/password :member/confirm-password]]
                                        [:email [:email]]
                                        [:equal [:member/password :member/confirm-password]]
