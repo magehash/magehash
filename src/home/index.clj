@@ -1,7 +1,6 @@
 (ns home.index
   (:require [components :refer [icon input label submit error]]
-            [coast :refer [form action-for transact redirect url-for rescue validate queue]]
-            [scraper]))
+            [coast :refer [form action-for transact redirect url-for rescue validate queue]]))
 
 (defn site-form [{:keys [errors session]}]
   (form (action-for :site.new/action)
@@ -112,10 +111,10 @@
      [:div {:class "fl w-50-ns w-100 h5 flex flex-column justify-center"}
       [:div {:class "ph2"}
        [:h1 {:class "f3 fw4 lh-title"}
-        "Watch up to 100 sites"]
+        "Navigate deeply into your site"]
        [:p {:class "f5 lh-copy mid-gray"}
         "Let Magehash do the tedious work for you."
-        "Just enter your sites in the dashboard and they'll be monitored every hour on the hour"]]]]]
+        " Enter your sites in the dashboard and magehash will navigate with sessions to any page on your site, including payment forms, and shopping carts"]]]]]
    [:div {:class "bg-lightest-gray pv6 ph3 pv6_mobile"}
     [:div {:class "cf mw8 center"}
      [:div {:class "fl w-50-ns w-100 h5 flex flex-column justify-center"}
@@ -123,8 +122,7 @@
        [:h1 {:class "f3 fw4 lh-title"}
         "Get notified of changes by email"]
        [:p {:class "f5 lh-copy mid-gray"}
-        "Notifications happen when any js on your site changes. If you change your js, you can easily click a link"
-        " and recreate a new hash for that asset"]]]
+        "Notifications happen when any js on your site changes. If you change your js as part of a deploy, a new hash will be generated automatically and you can safely ignore any warnings"]]]
 
      [:div {:class "fl w-50-ns w-100 h5 flex flex-column justify-center"}
       [:div {:class "ph4-ns"}
