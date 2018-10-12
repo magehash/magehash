@@ -8,7 +8,4 @@
  "auth.css" ["tachyons.min.css"
              "auth.css"
              "checkout.css"]
- "auth.js" ["TweenMax.min.js"
-            "nearby.js"
-            "auth.js"
-            "checkout.js"]}
+ "auth.js" ["checkout.js"]}
