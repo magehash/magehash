@@ -53,6 +53,7 @@
          "# Assets"]
         [:div {:class "dtc tc pv2 dashboard__table-content-desktop bg-light-gray"}
          "Last Change Detected"]
+        [:div {:class "dtc tc pv2 dashboard__table-content-desktop bg-light-gray"}]
         [:div {:class "dtc tc pv2 dashboard__table-content-desktop bg-light-gray"}]]
 
        (for [{site :property/site :as p} properties]
@@ -68,6 +69,10 @@
                        (map #(.toInstant %))
                        (sort)
                        (last))]]
+          [:div {:class "dtc tc pv2 dashboard__table-content-desktop bg-white"}
+           (a {:action (action-for :property.scrape/action p)
+               :class "link blue underline"}
+             "Hash")]
           [:div {:class "dtc tc pv2 dashboard__table-content-desktop bg-white"}
            (a {:action (action-for :property.delete/action p)
                :class "link blue underline"
@@ -94,6 +99,10 @@
                 (map #(.toInstant %))
                 (sort)
                 (last))]]]
+         [:div {:class "fr"}
+          (a {:action (action-for :property.scrape/action p)
+              :class "cf link white bg-gray dim br-pill ph3 pv2"}
+            "Hash")]
          [:div {:class "fr"}
           (a {:action (action-for :property.delete/action p)
               :class "cf link white bg-gray dim br-pill ph3 pv2"
