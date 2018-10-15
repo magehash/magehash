@@ -9,9 +9,6 @@ clean:
 uberjar:
 	clj -A\:uberjar
 
-server:
-	clj -m server
-
 repl:
 	clj -R:repl bin/repl.clj
 

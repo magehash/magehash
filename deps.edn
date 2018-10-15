@@ -1,7 +1,7 @@
 {:paths ["src" "resources"]
  :deps
  {org.clojure/clojure {:mvn/version "1.9.0"}
-  coast-framework/coast.eta {:mvn/version "1.0.3"}
+  coast-framework/coast.eta {:mvn/version "1.0.4"}
   buddy/buddy-hashers {:mvn/version "1.3.0"}
   com.draines/postal {:mvn/version "2.0.2"}
   stylefruits/gniazdo {:mvn/version "1.0.1"}
