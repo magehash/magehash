@@ -13,7 +13,7 @@
 
 (defn subscription-request [m]
   (let [form-params {:customer (:customer m)
-                     "items[0][plan]" "plan_Dm4XFuaP7YSDbL"}]
+                     "items[0][plan]" "plan_DnaZRny5kzBMnl"}]
     {:url "https://api.stripe.com/v1/subscriptions"
      :method :post
      :form-params form-params
