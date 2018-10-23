@@ -87,7 +87,7 @@
      (js "bundle.js")]
     [:body
       (sidebar request)
-      [:div {:class "ml7"}
+      [:div {:class "ml7-l"}
        (nav request)
        [:div {:class "ph4-ns ph3"}
         body]]]])
