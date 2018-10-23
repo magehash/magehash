@@ -26,24 +26,25 @@
     children))
 
 (defn nav [request]
-  (if (some? (-> request :session :member/email))
-   [:nav {:class "dt top-0 w-100 pa3 h3 ph5-ns bg-white z-1 sticky"}
-    [:a {:class "dn-l dtc v-mid f3 fw5 blue link dim w-third" :href (url-for :dashboard) :title "Dashboard"}
-     "Magehash"]
-    [:div {:class "dtc v-mid w-75 tr"}
-     (nav-link {:href (url-for :property.create/view)}
-       "Add New Site")
-     (nav-link {:action (action-for :auth.sign-out/action) :title "Sign Out"}
-       "Sign Out")]]
-   [:nav {:class "dt w-100 border-box pa3 ph5-ns fixed z-2 bg-blue-90"}
-    [:a {:class "dtc v-mid white link dim w-third" :href (url-for :home) :title "Home"}
-     [:img {:src "/img/logo-white.png"}]]
+  (when (not (contains? #{:auth.login/view :auth.login/action :auth.signup/view :auth.signup/action} (:coast.router/name request)))
+    (if (some? (-> request :session :member/email))
+     [:nav {:class "dt top-0 w-100 pa3 h3 ph5-ns bg-white z-1 sticky"}
+      [:a {:class "dn-l dtc v-mid f3 fw5 blue link dim w-third" :href (url-for :dashboard) :title "Dashboard"}
+       "Magehash"]
+      [:div {:class "dtc v-mid w-75 tr"}
+       (nav-link {:href (url-for :property.create/view)}
+         "Add New Site")
+       (nav-link {:action (action-for :auth.sign-out/action) :title "Sign Out"}
+         "Sign Out")]]
+     [:nav {:class "dt top-0 pa3 ph5-ns z-1 bg-blue-90 sticky w-100"}
+      [:a {:class "dtc v-mid white link dim w-third" :href (url-for :home) :title "Home"}
+       [:img {:src "/img/logo-white.png"}]]
 
-    [:div {:class "dtc v-mid w-75 tr"}
-     [:a {:class "link dim white f6 f5-ns dib mr3 mr4-ns" :href (url-for :auth.login/view) :title "Login"}
-       "Log In"]
-     [:a {:class "link dim white f6 f5-ns dib" :href (url-for :auth.signup/view) :title "Sign Up"}
-      "Sign Up"]]]))
+      [:div {:class "dtc v-mid w-75 tr"}
+       [:a {:class "link dim white f6 f5-ns dib mr3 mr4-ns" :href (url-for :auth.login/view) :title "Login"}
+         "Log In"]
+       [:a {:class "link dim white f6 f5-ns dib" :href (url-for :auth.signup/view) :title "Sign Up"}
+        "Sign Up"]]])))
 
 (defn sidebar-link [m & children]
   [:li {:class "flex items-center lh-copy ph0-l bb b--black-10"}
