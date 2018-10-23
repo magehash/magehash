@@ -21,15 +21,20 @@
       [:div {:class (:class params)}
        children]])))
 
+(defn nav-link [m & children]
+  (a (merge {:class "link hover-blue dark-gray f6 f5-ns dib mr3 mr4-ns"} m)
+    children))
+
 (defn nav [request]
   (when (not (contains? #{:auth.login/view :auth.login/action :auth.signup/view :auth.signup/action} (:coast.router/name request)))
     (if (some? (-> request :session :member/email))
-     [:nav {:class "dt w-100 border-box pa3 ph5-ns fixed z-2 bg-blue-90"}
-      [:a {:class "dtc v-mid white link dim w-third" :href (url-for :dashboard) :title "Dashboard"}
-       [:img {:src "/img/logo-white.png"}]]
-
+     [:nav {:class "dt w-100 border-box pa3 h3 ph5-ns fixed bg-white"}
+      [:a {:class "dtc v-mid f3 fw5 blue link dim w-third" :href (url-for :dashboard) :title "Dashboard"}
+       "Magehash"]
       [:div {:class "dtc v-mid w-75 tr"}
-       (a {:class "link dim white f6 f5-ns dib mr3 mr4-ns" :action (action-for :auth.sign-out/action) :title "Sign Out"}
+       (nav-link {:href (url-for :property.create/view)}
+         "Add New Site")
+       (nav-link {:action (action-for :auth.sign-out/action) :title "Sign Out"}
          "Sign Out")]]
      [:nav {:class "dt w-100 border-box pa3 ph5-ns fixed z-2 bg-blue-90"}
       [:a {:class "dtc v-mid white link dim w-third" :href (url-for :home) :title "Home"}
@@ -55,6 +60,29 @@
                  :auth.signup/view :auth.signup/action} route-name) "colorset"
     :else ""))
 
+(defn sidebar-link [m & children]
+  [:li {:class "flex items-center lh-copy ph0-l bb b--black-10"}
+   [:a (merge m {:class (str "link dark-gray pl3 flex-auto pa3 db hover-blue " (when (:active? m) "bs-left-blue"))})
+    children]])
+
+(defn sidebar [request]
+  (when (some? (-> request :session :member/email))
+    (let [sites? (= (:uri request) (url-for :dashboard))
+          assets? (= (:uri request) (url-for :asset.index/view))
+          diffs? (= (:uri request) "")] ;(url-for :diffs))]
+      [:div {:id "sidebar" :class "dn db-l top-0 fixed bg-white z-2 w-100" :style "height: calc(100vh);"}
+       [:div {:class "h3 tc bb b--black-10" :style "line-height: 4rem"}
+        [:a {:class "dim no-underline f3 fw5 blue" :href (url-for :dashboard) :title "Dashboard"}
+         ;[:img {:class "w4 center db pt3" :src "/img/logo-white.png"}]
+         "Magehash"]]
+       [:ul {:class "list pl0 mt0 measure center"}
+        (sidebar-link {:active? sites? :href (url-for :dashboard)}
+          "Sites")
+        (sidebar-link {:active? assets? :href (url-for :asset.index/view)}
+          "Assets")
+        (sidebar-link {:active? diffs?}
+          "Diffs")]])))
+
 (defn layout [request body]
   [:html
     [:head
@@ -73,7 +101,14 @@
        [:script {:src "https://js.stripe.com/v3/"}])]
     [:body {:class (body-class request)}
      (nav request)
-     body]])
+     (if (some? (-> request :session :member/email))
+       [:div {:class "cf"}
+        [:div {:class "fl w-20-l dn db-l h-100" :style "transform: translate(0, 0);"}
+         (sidebar request)]
+        [:div {:class "fl w-80-l w-100 overflow-scroll" :style "height: calc(100vh);"}
+         [:div {:class "pt5 ph4-ns ph3"}
+          body]]]
+       body)]])
 
 (defn qualified-name [k]
   (when (ident? k)

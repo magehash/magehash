@@ -11,7 +11,7 @@
              :value (:site/url params)})
       (error (:site/url errors))
 
-      (submit {:class "bg-green white br1 mt2 pv2"} "Add Site"))]])
+      (submit {:class "bg-blue white br1 mt2 pv2"} "Add Site"))]])
 
 (defn action [{:keys [params]
                member-id :member/id :as request}]

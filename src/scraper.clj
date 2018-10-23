@@ -69,6 +69,7 @@
                                       asset/content asset/site]}
                        {:site/properties [{:property/member [member/email]}]}]
                      [:site/url url])
+          _ (when (nil? (-> site :site/properties first :property/member :member/email)) (throw (Exception. "That site doesn't belong to any member")))
           _ (println "[scraper/save-assets] Attempting to get script tags from " url)
           tags (-> (chrome/with-connection [c "http://localhost:9222"]
                      (chrome/navigate c {:url url :timeout 30000})

@@ -111,7 +111,9 @@
         cron (q '[:select cron/name cron/created-at cron/updated-at
                   :order cron/created-at desc
                          cron/updated-at desc])]
-    [:div {:class "pt6 mw8 center ph3"}
+    [:div
+     [:h2 {:class "f4 lh-title pt0 mid-gray fw3 dash-subtitle"}
+      "Your Sites"]
      (members-table members)
      (properties-table (->> (map :member/properties members)
                             (mapcat identity)))

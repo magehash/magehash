@@ -10,40 +10,10 @@
                                                    [site/id site/url
                                                     {:site/assets [asset/id asset/name asset/hash asset/created-at]}]}]}]
                                               [:member/id member-id])]
-    [:div {:class "cf ph2-ns dashboard-content"}
-     [:div {:class "fl w-100 w-25-ns pa2 dash__sidebar"}
-      [:ul {:class "list pl0 menu__list"}
-       [:a {:href (url-for :dashboard)}
-        [:li {:class "menu__list-element"}
-         [:img {:src "/img/internet.svg", :height "20px"}]
-         [:span {:class "ml1"}
-          "Websites"]]]
-
-       [:a {:href "mailto:me@ferrucc.io?Subject=Edit%20Magehash%20Account"}
-        [:li {:class "menu__list-element"}
-         [:img {:src "/img/settings.svg", :height "20px"}]
-         [:span {:class "ml1"}
-          "Settings"]]]
-
-       [:a {:href "/sign-out"}
-        [:li {:class "menu__list-element"}
-         [:img {:src "/img/exit.svg", :height "20px", :fill "red"}]
-         [:span {:class "ml1"}
-          "Logout"]]]]]
-
-
-     [:div {:class "fl w-100 w-75-ns pa2 dashboard__watch-websites-container"}
-      [:div {:class "cf ph2-ns"}
-       [:div {:class "fl w-100 w-75-ns pa2"}
-        [:h1 {:class "f3 dash-title"}
-         "Monitored Websites " (str "(" (count properties)  " / 100)")]
-        [:h2 {:class "f4 lh-title pt0 mid-gray fw3 dash-subtitle"}
-         "Your Websites"]]
-
-       [:div {:class "fl w-100 w-25-ns pa2 mt4 button__add-website-div"}
-        [:a {:class "f6 link dim br-pill ph3 pv2 mb2 dib white bg-dark-blue button__add-website"
-             :href (url-for :property.create/view)}
-         "Add New Website"]]]
+     [:div
+      [:div {:class ""}
+       [:h2 {:class "f4 lh-title pt0 mid-gray fw3 dash-subtitle"}
+        "Your Sites"]]
 
       [:div {:class "dt dt--fixed hide-mobile"}
        [:div {:class "dt-row"}
@@ -107,4 +77,4 @@
           (a {:action (action-for :property.delete/action p)
               :class "cf link white bg-gray dim br-pill ph3 pv2"
               :data-confirm true}
-            "Delete")]])]]]))
+            "Delete")]])]]))

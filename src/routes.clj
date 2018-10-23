@@ -24,16 +24,16 @@
 
 (def private (wrap-routes wrap-auth
               [[:get "/dashboard" :home.dashboard/view :dashboard]
-               [:get "/property/create" :property.create/view]
-               [:post "/property/create" :property.create/action]
-               [:post "/property/delete/:property-id" :property.delete/action]
-               [:post "/property/scrape/:property-id" :property.scrape/action]]))
+               [:get "/new-property" :property.create/view]
+               [:post "/new-property" :property.create/action]
+               [:post "/properties/:id/delete" :property.delete/action]
+               [:post "/properties/:id/scrape" :property.scrape/action]
+               [:get "/assets" :asset.index/view]]))
 
 (def public [[:get "/"    :home.index/view :home]
              [:post "/"   :home.index/action :home/action]
              [:get "/404" :error.not-found/view :404]
              [:get "/500" :error.server-error/view :500]
-             [:get "/site/:id/assets" :asset.list/view :asset/list]
              [:get "/sign-up" :auth.signup/view]
              [:post "/sign-up" :auth.signup/action]
              [:get "/sign-in" :auth.login/view]

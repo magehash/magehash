@@ -7,10 +7,10 @@ body{
 }
 
 .dashboard__watch-websites-container{
-	border-width: 0;
+	/* border-width: 0;
 	border-left-width: 1px;
 	border-style: solid;
-	border-color: #dae1e7;
+	border-color: #dae1e7; */
 	min-height: 600px;
 	height: 100%
 }
