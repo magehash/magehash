@@ -31,7 +31,7 @@
                [:post "/properties/:id/scrape" :property.scrape/action]
                [:get "/assets" :asset.index/view]]))
 
-(def public (wrap-routes wrap-auth #(wrap-layout % layout-auth)
+(def public (wrap-routes #(wrap-layout % layout-auth)
              [[:get "/"    :home.index/view :home]
               [:post "/"   :home.index/action :home/action]
               [:get "/404" :error.not-found/view :404]

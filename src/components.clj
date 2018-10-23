@@ -107,6 +107,7 @@
      (js "auth.js")
      [:script {:src "https://js.stripe.com/v3/"}]]
     [:body {:class "colorset"}
+      (nav request)
       body]])
 
 (defn qualified-name [k]
