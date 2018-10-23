@@ -108,3 +108,8 @@ button:focus {
 .bs-left-blue {
   box-shadow: inset .1875rem 0 0 #357edd;
 }
+
+.sticky {
+  position: sticky;
+  position: -webkit-sticky;
+}

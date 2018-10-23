@@ -26,39 +26,24 @@
     children))
 
 (defn nav [request]
-  (when (not (contains? #{:auth.login/view :auth.login/action :auth.signup/view :auth.signup/action} (:coast.router/name request)))
-    (if (some? (-> request :session :member/email))
-     [:nav {:class "dt w-100 border-box pa3 h3 ph5-ns fixed bg-white"}
-      [:a {:class "dtc v-mid f3 fw5 blue link dim w-third" :href (url-for :dashboard) :title "Dashboard"}
-       "Magehash"]
-      [:div {:class "dtc v-mid w-75 tr"}
-       (nav-link {:href (url-for :property.create/view)}
-         "Add New Site")
-       (nav-link {:action (action-for :auth.sign-out/action) :title "Sign Out"}
-         "Sign Out")]]
-     [:nav {:class "dt w-100 border-box pa3 ph5-ns fixed z-2 bg-blue-90"}
-      [:a {:class "dtc v-mid white link dim w-third" :href (url-for :home) :title "Home"}
-       [:img {:src "/img/logo-white.png"}]]
+  (if (some? (-> request :session :member/email))
+   [:nav {:class "dt top-0 w-100 pa3 h3 ph5-ns bg-white z-1 sticky"}
+    [:a {:class "dn-l dtc v-mid f3 fw5 blue link dim w-third" :href (url-for :dashboard) :title "Dashboard"}
+     "Magehash"]
+    [:div {:class "dtc v-mid w-75 tr"}
+     (nav-link {:href (url-for :property.create/view)}
+       "Add New Site")
+     (nav-link {:action (action-for :auth.sign-out/action) :title "Sign Out"}
+       "Sign Out")]]
+   [:nav {:class "dt w-100 border-box pa3 ph5-ns fixed z-2 bg-blue-90"}
+    [:a {:class "dtc v-mid white link dim w-third" :href (url-for :home) :title "Home"}
+     [:img {:src "/img/logo-white.png"}]]
 
-      [:div {:class "dtc v-mid w-75 tr"}
-       [:a {:class "link dim white f6 f5-ns dib mr3 mr4-ns" :href (url-for :auth.login/view) :title "Login"}
-         "Log In"]
-       [:a {:class "link dim white f6 f5-ns dib" :href (url-for :auth.signup/view) :title "Sign Up"}
-        "Sign Up"]]])))
-
-(defn bundle-name [{route-name :coast.router/name}]
-  (cond
-    (contains? #{:auth.login/view
-                 :auth.login/action
-                 :auth.signup/view
-                 :auth.signup/action} route-name) "auth"
-    :else "bundle"))
-
-(defn body-class [{route-name :coast.router/name}]
-  (cond
-    (contains? #{:auth.login/view :auth.login/action
-                 :auth.signup/view :auth.signup/action} route-name) "colorset"
-    :else ""))
+    [:div {:class "dtc v-mid w-75 tr"}
+     [:a {:class "link dim white f6 f5-ns dib mr3 mr4-ns" :href (url-for :auth.login/view) :title "Login"}
+       "Log In"]
+     [:a {:class "link dim white f6 f5-ns dib" :href (url-for :auth.signup/view) :title "Sign Up"}
+      "Sign Up"]]]))
 
 (defn sidebar-link [m & children]
   [:li {:class "flex items-center lh-copy ph0-l bb b--black-10"}
@@ -69,13 +54,17 @@
   (when (some? (-> request :session :member/email))
     (let [sites? (= (:uri request) (url-for :dashboard))
           assets? (= (:uri request) (url-for :asset.index/view))
-          diffs? (= (:uri request) "")] ;(url-for :diffs))]
-      [:div {:id "sidebar" :class "dn db-l top-0 fixed bg-white z-2 w-100" :style "height: calc(100vh);"}
+          diffs? (= (:uri request) "") ;(url-for :diffs))]
+          admin? (= (:uri request) (url-for :admin.dashboard/view))]
+      [:div {:id "sidebar" :class "dn db-l top-0 bottom-0 fixed bg-white z- 2 w5" :style "height: calc(100vh);"}
        [:div {:class "h3 tc bb b--black-10" :style "line-height: 4rem"}
         [:a {:class "dim no-underline f3 fw5 blue" :href (url-for :dashboard) :title "Dashboard"}
          ;[:img {:class "w4 center db pt3" :src "/img/logo-white.png"}]
          "Magehash"]]
        [:ul {:class "list pl0 mt0 measure center"}
+        (when (true? (-> request :member/admin))
+          (sidebar-link {:active? admin? :href (url-for :admin.dashboard/view)}
+            "Admin"))
         (sidebar-link {:active? sites? :href (url-for :dashboard)}
           "Sites")
         (sidebar-link {:active? assets? :href (url-for :asset.index/view)}
@@ -83,7 +72,7 @@
         (sidebar-link {:active? diffs?}
           "Diffs")]])))
 
-(defn layout [request body]
+(defn layout-app [request body]
   [:html
     [:head
      [:title "Magehash - Securing Your Static Assets"]
@@ -94,21 +83,31 @@
      [:link {:rel "icon" :type "image/png" :sizes "16x16" :href "favicon_package/favicon-16x16.png"}]
      [:link {:rel "apple-touch-icon" :sizes "180x180" :href "favicon_package/apple-touch-icon.png"}]
      [:link {:rel "mask-icon" :href "favicon_package/safari-pinned-tab.svg" :color "#5bbad5"}]
-     (css (str (bundle-name request) ".css"))
-     (js (str (bundle-name request) ".js"))
-     (when (or (= (:coast.router/name request) :auth.signup/view)
-               (= (:coast.router/name request) :auth.signup/action))
-       [:script {:src "https://js.stripe.com/v3/"}])]
-    [:body {:class (body-class request)}
-     (nav request)
-     (if (some? (-> request :session :member/email))
-       [:div {:class "cf"}
-        [:div {:class "fl w-20-l dn db-l h-100" :style "transform: translate(0, 0);"}
-         (sidebar request)]
-        [:div {:class "fl w-80-l w-100 overflow-scroll" :style "height: calc(100vh);"}
-         [:div {:class "pt5 ph4-ns ph3"}
-          body]]]
-       body)]])
+     (css "bundle.css")
+     (js "bundle.js")]
+    [:body
+      (sidebar request)
+      [:div {:class "ml7"}
+       (nav request)
+       [:div {:class "ph4-ns ph3"}
+        body]]]])
+
+(defn layout-auth [request body]
+  [:html
+    [:head
+     [:title "Magehash - Securing Your Static Assets"]
+     [:meta {:name "viewport" :content "width=device-width, initial-scale=1"}]
+     [:meta {:name "msapplication-TileColor" :content "#da532c"}]
+     [:meta {:name "theme-color" :content "#ffffff"}]
+     [:link {:rel "icon" :type "image/png" :sizes "32x32" :href "favicon_package/favicon-32x32.png"}]
+     [:link {:rel "icon" :type "image/png" :sizes "16x16" :href "favicon_package/favicon-16x16.png"}]
+     [:link {:rel "apple-touch-icon" :sizes "180x180" :href "favicon_package/apple-touch-icon.png"}]
+     [:link {:rel "mask-icon" :href "favicon_package/safari-pinned-tab.svg" :color "#5bbad5"}]
+     (css "auth.css")
+     (js "auth.js")
+     [:script {:src "https://js.stripe.com/v3/"}]]
+    [:body {:class "colorset"}
+      body]])
 
 (defn qualified-name [k]
   (when (ident? k)
