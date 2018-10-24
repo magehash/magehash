@@ -1,6 +1,7 @@
 (ns components
-  (:require [coast :refer [action-for form css js url-for]]
-            [clojure.string :as string])
+  (:require [coast :refer [action-for form css js url-for raw]]
+            [clojure.string :as string]
+            [clojure.java.io :as io])
   (:gen-class))
 
 (defn icon
@@ -46,9 +47,16 @@
        [:a {:class "link dim white f6 f5-ns dib" :href (url-for :auth.signup/view) :title "Sign Up"}
         "Sign Up"]]])))
 
+(defn svg [s]
+  (let [r (io/resource (str "public" s))]
+    (when (some? r)
+      (-> r slurp raw))))
+
 (defn sidebar-link [m & children]
   [:li {:class "flex items-center lh-copy ph0-l bb b--black-10"}
    [:a (merge m {:class (str "link dark-gray pl3 flex-auto pa3 db hover-blue " (when (:active? m) "bs-left-blue"))})
+    [:div {:class "dib w1 mr2"}
+     (svg (:icon m))]
     children]])
 
 (defn sidebar [request]
@@ -64,13 +72,13 @@
          "Magehash"]]
        [:ul {:class "list pl0 mt0 measure center"}
         (when (true? (-> request :member/admin))
-          (sidebar-link {:active? admin? :href (url-for :admin.dashboard/view)}
+          (sidebar-link {:active? admin? :icon "/img/lock-closed.svg" :href (url-for :admin.dashboard/view)}
             "Admin"))
-        (sidebar-link {:active? sites? :href (url-for :dashboard)}
+        (sidebar-link {:active? sites? :icon "/img/browser-window-open.svg" :href (url-for :dashboard)}
           "Sites")
-        (sidebar-link {:active? assets? :href (url-for :asset.index/view)}
+        (sidebar-link {:active? assets? :icon "/img/code.svg" :href (url-for :asset.index/view)}
           "Assets")
-        (sidebar-link {:active? diffs?}
+        (sidebar-link {:active? diffs? :icon "/img/edit-copy.svg"}
           "Diffs")]])))
 
 (defn layout-app [request body]

@@ -46,6 +46,11 @@ body {
   z-index: 1;
 }
 
+#sidebar a:hover svg path,
+#sidebar a.bs-left-blue svg path {
+  fill: #357edd;
+}
+
 input:focus,
 select:focus,
 textarea:focus,
