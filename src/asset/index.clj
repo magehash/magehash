@@ -1,7 +1,8 @@
 (ns asset.index
   (:require [coast :refer [first! q pull]]
-            [components :refer [card content title table th tr td tbody]]
-            [coast.time :as time]))
+            [clojure.string :as string]
+            [coast.time :as time]
+            [components :refer [card content title table th tr td tbody]]))
 
 (defn view [{member-id :member/id :as req}]
   (let [props (q '[:pull [{:property/site [site/url
@@ -24,7 +25,7 @@
               (tbody
                 (for [{:asset/keys [hash name updated-at created-at]} (-> prop :property/site :site/assets)]
                   (tr
-                    (td name)
+                    (td (if (string/blank? name) "inline" name))
                     (td hash)
                     (td [:time
                          (-> (or updated-at created-at)
