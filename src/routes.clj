@@ -2,23 +2,7 @@
   (:require [coast :refer [pull raise unauthorized wrap-routes]]
             [coast.middleware.site :refer [wrap-layout]]
             [components :refer [layout-app layout-auth]]
-            [error.not-found]))
-
-(defn wrap-admin [handler]
-  (fn [{{:keys [member/email]} :session :as request}]
-    (let [member (pull '[member/id member/email member/admin]
-                       [:member/email email])]
-      (if (true? (:member/admin member))
-        (handler (merge request member))
-        (error.not-found/view request)))))
-
-(defn wrap-auth [handler]
-  (fn [{{:keys [member/email]} :session :as request}]
-    (let [member (pull '[member/id member/email member/admin]
-                       [:member/email email])]
-      (if (some? member)
-        (handler (merge request member))
-        (error.not-found/view request)))))
+            [middleware :refer [wrap-admin wrap-auth]]))
 
 (def admin (wrap-routes wrap-admin #(wrap-layout % layout-app)
             [[:get "/admin/dashboard" :admin.dashboard/view]]))
