@@ -2,6 +2,7 @@
  #{#:db{:constraint [:property/site :property/member],
         :type "unique"}},
  [:property/site :property/member] #:db{:type "unique"},
+ :member/api-token #:db{:type "text"},
  :site/properties #:db{:type :many, :ref :property/site},
  :member/email #:db{:type "citext"},
  :joins
@@ -18,8 +19,8 @@
  #{:site/properties :site/assets :property/site :member/properties
    :property/member},
  :cols
- #{:member/admin :asset/hash :asset/content :member/password
-   :asset/name},
+ #{:member/api-token :member/admin :asset/hash :asset/content
+   :member/password :asset/name},
  :property/site #:db{:type :one, :delete "no action"},
  :asset/hash #:db{:type "text"},
  :member/properties #:db{:type :many, :ref :property/member},

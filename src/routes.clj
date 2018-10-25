@@ -1,8 +1,8 @@
 (ns routes
-  (:require [coast :refer [pull raise unauthorized wrap-routes]]
+  (:require [coast :refer [pull raise unauthorized wrap-routes prefix-routes]]
             [coast.middleware.site :refer [wrap-layout]]
             [components :refer [layout-app layout-auth]]
-            [middleware :refer [wrap-admin wrap-auth]]))
+            [middleware :refer [wrap-admin wrap-auth wrap-api-auth]]))
 
 (def admin (wrap-routes wrap-admin #(wrap-layout % layout-app)
             [[:get "/admin/dashboard" :admin.dashboard/view]]))
@@ -27,3 +27,10 @@
               [:post "/sign-out" :auth.sign-out/action]]))
 
 (def routes (concat public private admin))
+
+(def api-routes (wrap-routes wrap-api-auth
+                  (prefix-routes "/api"
+                    [[:get "" :api/status]
+                     [:get "/assets" :api/list-assets]
+                     [:post "/sites" :api/add-site]
+                     [:post "/sites/delete" :api/delete-site]])))

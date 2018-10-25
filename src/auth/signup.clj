@@ -1,6 +1,7 @@
 (ns auth.signup
-  (:require [coast :refer [action-for form insert redirect rescue url-for validate]]
+  (:require [coast :refer [action-for form insert redirect rescue url-for validate uuid]]
             [buddy.hashers :as hashers]
+            [clojure.string :as string]
             [stripe]))
 
 (defn view [{{:member/keys [email password confirm-password]} :errors}]
@@ -74,6 +75,12 @@
      [:a {:href (url-for :auth.login/view) :class "form-link"}
       "Login"]]]])
 
+(defn api-token []
+  (string/join ""
+    (rest
+     (string/split
+      (str (coast/uuid)) #"-"))))
+
 (defn action [{:keys [params] :as request}]
   (let [_ (stripe/subscribe params)
         [member errors] (-> (select-keys params [:member/email :member/password :member/confirm-password])
@@ -84,6 +91,7 @@
                                        [:max-length 100 :password]])
                             (update :member/password hashers/derive)
                             (dissoc :member/confirm-password)
+                            (assoc :member/api-token (api-token))
                             (insert)
                             (rescue))]
     (if (nil? errors)
