@@ -13,14 +13,16 @@
           (th "Email")
           (th "In Trial")
           (th "Admin")
+          (th "API Token")
           (th "Joined")
           (th "Last Payment Date"))
          (tbody
-           (for [{:member/keys [admin email created-at]} members]
+           (for [{:member/keys [admin email created-at api-token]} members]
              (tr
                (td email)
                (td)
                (td (if (true? admin) "Yes" "No"))
+               (td api-token)
                (td
                 [:time (.toInstant created-at)])
                (td))))]))))
@@ -103,7 +105,7 @@
                (td (ago (or updated-at created-at))))))]))))
 
 (defn view [request]
-  (let [members (q '[:pull [member/email member/created-at member/admin
+  (let [members (q '[:pull [member/email member/created-at member/admin member/api-token
                             {:member/properties [{:property/site [site/url site/created-at
                                                                   {:site/assets [asset/id asset/created-at
                                                                                  asset/updated-at]}]}
