@@ -4,7 +4,8 @@
             [clojure.edn :as edn]
             [clojure.set]
             [clojure.java.io :as io]
-            [coast :refer [q pull transact uuid]]
+            [coast :refer [q pull transact uuid env]]
+            [coast.db :refer [defq]]
             [clojure.data.json :as json]
             [clojure.stacktrace :as st]
             [chrome]
@@ -58,9 +59,16 @@
 
 (defn fmt-asset [a]
   (let [trimmed-content (if (= "inline" (:asset/name a))
-                          (str (subs (:asset/content a) 0 140) "...")
+                          (str (subs (:asset/content a) 0 (min (count (:asset/conetnt a)) 140)) "...")
                           "")]
     (str "- [" (:asset/hash a) "] " (:asset/name a) "\n" trimmed-content)))
+
+(defn save-files [assets]
+  (doseq [asset assets]
+    (spit (str (env :files) "assets/" (:asset/hash asset) ".js")
+          (:asset/content asset))))
+
+(defq "sql/assets.sql")
 
 (defn save-assets [url]
   (try
@@ -79,20 +87,23 @@
                    (scripts! url))
           _ (println "[scraper/save-assets] Scraped" (count tags) "asset(s) from" url)
           assets (->> tags
-                      (map #(hash-map :asset/name (or (:src %) "inline")
+                      (map #(hash-map :asset/name (if (string/blank? (:src %)) "inline" (:src %))
                                       :asset/hash (:sha1 %)
                                       :asset/content (:content %)
                                       :asset/site (:site/id site))))
           old (set (map #(dissoc % :asset/id) (:site/assets site)))
           new (set assets)
+
           changed-assets (clojure.set/difference new old)
           member-email (-> site :site/properties first :property/member :member/email)]
       (cond
         (and (empty? old) ; new site, don't send alert
              (not (empty? new)))
         (do
-          (transact {:site/id (:site/id site)
-                     :site/assets new})
+          (let [rows (transact {:site/id (:site/id site)
+                                :site/assets new})]
+            (save-files (:site/assets rows)))
+          (reset-asset-contents {:site (:site/id site)})
           (println "[scraper/save-assets] Hashed" (count assets) "asset(s) from brand ✨ new ✨ site" url))
 
         (empty? changed-assets) ; nothing changed, don't send alert
@@ -102,29 +113,31 @@
         (do
           (transact {:site/id (:site/id site)
                      :site/assets []})
-          (transact {:site/id (:site/id site)
-                     :site/assets new})
+          (let [rows (transact {:site/id (:site/id site)
+                                :site/assets new})]
+            (save-files (:site/assets rows)))
           (mailer/mail :txt/alert member-email {:site/url url
                                                 :site/assets (->> (map fmt-asset changed-assets)
                                                                   (string/join "\n\n"))})
+          (reset-asset-contents {:site (:site/id site)})
           (println "[scraper/save-assets] Hashed" (count assets) "asset(s) from site" url))))
     (catch Exception e
       (println "Url" url)
       (println "Message" (.getMessage e))
       (println "Data" (ex-data e))
       (println "Stacktrace" (with-out-str
-                             (st/print-stack-trace e))))))
+                             (st/print-stack-trace e)))
+      e)))
 
 (defn scrape
   ([url]
    (let [urls (if (some? url)
                 [url]
                 (->> (q '[:select site/url])
-                     (map :site/url)))]
-     (doall
-       (for [url urls]
-         (save-assets url)))
-     (transact {:cron/name "Asset Change Notifier"})))
+                     (map :site/url)))
+         errors (map save-assets urls)]
+     (when (every? nil? errors)
+       (transact {:cron/name "Asset Change Notifier"}))))
   ([]
    (scrape nil)))
 
