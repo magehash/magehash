@@ -3,7 +3,8 @@
             [coast.time :as time]
             [components :refer [a]]))
 
-(defn view [{member-id :member/id}]
+(defn view [{member-id :member/id
+             flash :flash}]
   (let [{properties :member/properties} (pull '[{:member/properties
                                                  [property/id
                                                   {:property/site
@@ -11,6 +12,9 @@
                                                     {:site/assets [asset/id asset/name asset/hash asset/created-at]}]}]}]
                                               [:member/id member-id])]
      [:div
+      (when (some? flash)
+        [:div {:class "bg-light-blue dark-blue pa2 mt2 flash"}
+         flash])
       [:div {:class ""}
        [:h2 {:class "f4 lh-title pt0 mid-gray fw3 dash-subtitle"}
         "Your Sites"]]
