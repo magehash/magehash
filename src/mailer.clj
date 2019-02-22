@@ -35,8 +35,8 @@
     (let [body (-> (io/resource (str "emails/" (name k) "." (namespace k)))
                    (slurp)
                    (fmt params))
-          creds {:host "smtp.mailgun.org"
-                 :user "postmaster@magehash.com"
+          creds {:host "smtp.mailtrap.io"
+                 :user "12341d55f5c1ed"
                  :pass (env :email-password)}
           from "Team Magehash <team@magehash.com>"]
       (send-message creds {:from from
