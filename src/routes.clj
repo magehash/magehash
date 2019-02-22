@@ -11,8 +11,8 @@
               [[:get "/dashboard" :home.dashboard/view :dashboard]
                [:get "/properties/new" :property.create/view]
                [:post "/properties/new" :property.create/action]
-               [:post "/properties/:id/delete" :property.delete/action]
-               [:post "/properties/:id/scrape" :property.scrape/action]
+               [:post "/properties/:property-id/delete" :property.delete/action]
+               [:post "/properties/:property-id/scrape" :property.scrape/action]
                [:get "/assets" :asset.index/view]]))
 
 (def public (wrap-routes #(wrap-layout % layout-auth)

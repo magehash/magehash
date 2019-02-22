@@ -2,13 +2,13 @@
   (:require [coast :refer [first! q redirect url-for rescue delete]]))
 
 (defn action [{member-id :member/id
-               {:keys [id]} :params}]
+               {property-id :property-id} :params}]
   (let [property (first!
                   (q '[:select property/id
                        :where [property/member ?member]
                               [property/id ?property]]
                      {:member member-id
-                      :property id}))
+                      :property property-id}))
         [_ errors] (rescue
                     (delete property))]
     (if (nil? errors)
