@@ -1,5 +1,5 @@
 (ns home.dashboard
-  (:require [coast :refer [action-for pull url-for]]
+  (:require [coast :refer [action-for pull url-for form]]
             [coast.time :as time]
             [components :refer [a]]))
 
@@ -40,14 +40,15 @@
                        (sort)
                        (last))]]
           [:div {:class "dtc tc pv2 dashboard__table-content-desktop bg-white"}
-           (a {:action (action-for :property.scrape/action p)
-               :class "link blue underline"}
-             "Hash")]
+           (form {:method "post" :action (str "/properties/" (get-in p [:property/site :site/id])  "/scrape")}
+                 [:button {:type "submit" :class "link blue underline"}
+                  [:div
+                   "Hash"]])]
           [:div {:class "dtc tc pv2 dashboard__table-content-desktop bg-white"}
-           (a {:action (action-for :property.delete/action p)
-               :class "link blue underline"
-               :data-confirm true}
-             "Delete")]])]
+           (form {:method "post" :action (str "/properties/" (get-in p [:property/site :site/id])  "/delete") :data-confirm true}
+                 [:button {:type "submit" :class "link blue underline"}
+                  [:div
+                   "Delete"]])]])]
       [:div {:class "mobile-websites__dashboard hide-desktop"}
        (for [{site :property/site :as p} properties]
         [:div {:class "card mobile-card__dashboard bg-white pa3 ma2 pb5"}

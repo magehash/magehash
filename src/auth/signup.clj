@@ -2,7 +2,8 @@
   (:require [coast :refer [action-for form insert redirect rescue url-for validate uuid]]
             [buddy.hashers :as hashers]
             [clojure.string :as string]
-            [stripe]))
+            ;;[stripe]
+            ))
 
 (defn view [{{:member/keys [email password confirm-password]} :errors}]
   [:div
@@ -64,8 +65,9 @@
             [:div {:class "form__item form__item--full form__item--register"}
              [:label {:class "form__label" :for "email"}
               "Credit Card"]
-             [:div {:id "card-element"}]
-             [:div {:id "card-errors"}]]
+             ;;[:div {:id "card-element"}]
+             ;;[:div {:id "card-errors"}]
+             ]
 
             [:div {:class "form__item form__item--full form__item--actions fl w-100 mb3"}
              [:input {:class "form__button" :type "submit" :name "register" :value "Register"}]])]]
@@ -82,7 +84,7 @@
       (str (coast/uuid)) #"-"))))
 
 (defn action [{:keys [params] :as request}]
-  (let [_ (stripe/subscribe params)
+  (let [;;_ (stripe/subscribe params)
         [member errors] (-> (select-keys params [:member/email :member/password :member/confirm-password])
                             (validate [[:required [:member/email :member/password :member/confirm-password]]
                                        [:email [:email]]
