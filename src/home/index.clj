@@ -93,7 +93,7 @@
       [:div {:class "cf mw8 center"}
          [:div {:class "fl w-50-ns w-100 h5 flex flex-column justify-center"}
           [:div {:class "ph2"}
-           [:h1 {:class "f3 fw4 lh-title"}
+           [:h1 {:class "f3 fw4 lh-title black"}
             "Keep your sites' assets secure"]
            [:p {:class "f5 lh-copy mid-gray"}
             "Have confidence that your js assets are exactly as you left them."
@@ -114,14 +114,14 @@
         [:div {:class "ph2"}
          [:h1 {:class "f3 fw4 lh-title"}
           "Navigate deeply into your site"]
-         [:p {:class "f5 lh-copy mid-gray"}
+         [:p {:class "f5 lh-copy white"}
           "Let Magehash do the tedious work for you."
           " Enter your sites in the dashboard and magehash will navigate with sessions to any page on your site, including payment forms, and shopping carts"]]]]]
      [:div {:class "bg-lightest-gray pv6 ph3 pv6_mobile"}
       [:div {:class "cf mw8 center"}
        [:div {:class "fl w-50-ns w-100 h5 flex flex-column justify-center"}
         [:div {:class "ph2"}
-         [:h1 {:class "f3 fw4 lh-title"}
+         [:h1 {:class "f3 fw4 lh-title black"}
           "Get notified of changes by email"]
          [:p {:class "f5 lh-copy mid-gray"}
           "Notifications happen when any js on your site changes. If you change your js as part of a deploy, a new hash will be generated automatically and you can safely ignore any warnings"]]]
